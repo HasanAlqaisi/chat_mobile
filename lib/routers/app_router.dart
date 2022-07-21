@@ -6,7 +6,9 @@ import 'package:chat_mobile/ui/auth/forgot_password/pages/forgot_password_page.d
 import 'package:chat_mobile/ui/auth/login/pages/login_page.dart';
 import 'package:chat_mobile/ui/auth/otp/pages/otp_page.dart';
 import 'package:chat_mobile/ui/auth/signup/pages/signup_page.dart';
+import 'package:chat_mobile/ui/home/pages/chat_page.dart';
 import 'package:chat_mobile/ui/home/pages/chats_page.dart';
+import 'package:chat_mobile/ui/home/pages/users_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final appRouterProvider = Provider<AppRouter>((ref) {
@@ -26,6 +28,16 @@ final appRouterProvider = Provider<AppRouter>((ref) {
       page: ChatsPage,
       initial: true,
       path: AppPaths.chats,
+      guards: [AuthGuard],
+    ),
+    AutoRoute(
+      page: ChatPage,
+      path: AppPaths.chat,
+      guards: [AuthGuard],
+    ),
+    AutoRoute(
+      page: UsersPage,
+      path: AppPaths.users,
       guards: [AuthGuard],
     ),
   ],
