@@ -47,6 +47,9 @@ dependencies:
   flutter_secure_storage: ^5.0.2
   jwt_decode: ^0.3.1
   fluttertoast: ^8.0.9
+  cached_network_image: ^3.2.1
+  font_awesome_flutter: ^10.1.0
+  bubble: ^1.2.1
 
 dev_dependencies:
   flutter_test:
