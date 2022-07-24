@@ -5,6 +5,7 @@ import 'package:chat_mobile/routers/app_paths.dart';
 import 'package:chat_mobile/utils/constants/secrets.dart';
 import 'package:chat_mobile/utils/storage/secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 
 final authGuardProvider = Provider((ref) {
   final secureStorage = ref.watch(appSecureStorageProvider);
@@ -23,7 +24,7 @@ class AuthGuard extends AutoRouteGuard {
 
     final token = await secureStorage.readToken(Secrets.tokenKey);
 
-    if (token != null) {
+    if (token != null && !Jwt.isExpired(token)) {
       resolver.next(true);
     } else {
       router.pushNamed(AppPaths.login);
