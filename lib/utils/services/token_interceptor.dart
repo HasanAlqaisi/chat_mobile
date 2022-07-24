@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'dart:developer' show log;
 
 import 'package:chat_mobile/routers/app_router.dart';
 import 'package:chat_mobile/routers/app_router.gr.dart';
 import 'package:chat_mobile/utils/constants/secrets.dart';
+import 'package:chat_mobile/utils/errors/exceptions.dart';
 import 'package:chat_mobile/utils/storage/secure_storage.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -34,15 +36,34 @@ class TokenInterceptors extends Interceptor {
         handler.next(options);
       } else {
         await secureStorage.writeToken(Secrets.tokenKey, null);
-
         appRouter.pushAndPopUntil(const LoginRoute(), predicate: (_) => false);
-
         Fluttertoast.showToast(msg: "session ended! Please login.");
 
         handler.resolve(Response(requestOptions: options));
       }
     }
     handler.next(options);
+  }
+
+  @override
+  void onError(DioError err, ErrorInterceptorHandler handler) {
+    switch (err.type) {
+      case DioErrorType.connectTimeout:
+        throw ApiTimeoutException();
+      case DioErrorType.sendTimeout:
+        throw ApiTimeoutException();
+      case DioErrorType.receiveTimeout:
+        throw ApiTimeoutException();
+      case DioErrorType.response:
+        throw ApiResponseException(
+          body: jsonDecode(err.response?.data),
+          type: jsonDecode(err.response?.data)['_type'],
+        );
+      case DioErrorType.cancel:
+        throw ApiCancelException();
+      case DioErrorType.other:
+        throw ApiUnkownException();
+    }
   }
 }
 
