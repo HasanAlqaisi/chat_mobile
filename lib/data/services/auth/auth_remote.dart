@@ -1,10 +1,8 @@
-import 'dart:convert';
 import 'dart:developer' show log;
 
 import 'package:chat_mobile/data/models/auth/login_info.dart';
 import 'package:chat_mobile/utils/errors/exceptions.dart';
 import 'package:chat_mobile/utils/services/http.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AuthRemote {
@@ -25,25 +23,6 @@ class AuthRemote {
       });
 
       return res.data!;
-    } on DioError catch (error) {
-      log('ERROR $error', name: 'http_auth.dart');
-      switch (error.type) {
-        case DioErrorType.connectTimeout:
-          throw ApiTimeoutException();
-        case DioErrorType.sendTimeout:
-          throw ApiTimeoutException();
-        case DioErrorType.receiveTimeout:
-          throw ApiTimeoutException();
-        case DioErrorType.response:
-          throw ApiResponseException(
-            body: jsonDecode(error.response?.data),
-            type: jsonDecode(error.response?.data)['_type'],
-          );
-        case DioErrorType.cancel:
-          throw ApiCancelException();
-        case DioErrorType.other:
-          throw ApiUnkownException();
-      }
     } catch (error) {
       log('ERROR $error', name: 'http_auth.dart:signup');
       throw ApiUnkownException();
@@ -58,26 +37,6 @@ class AuthRemote {
       });
       log("result ${res.data}", name: 'http_auth.dart:login');
       return LoginInfo.fromMap(res.data);
-    } on DioError catch (error) {
-      log("Error $error", name: 'http_auth.dart:login');
-
-      switch (error.type) {
-        case DioErrorType.connectTimeout:
-          throw ApiTimeoutException();
-        case DioErrorType.sendTimeout:
-          throw ApiTimeoutException();
-        case DioErrorType.receiveTimeout:
-          throw ApiTimeoutException();
-        case DioErrorType.response:
-          throw ApiResponseException(
-            body: jsonDecode(error.response?.data),
-            type: jsonDecode(error.response?.data)['_type'],
-          );
-        case DioErrorType.cancel:
-          throw ApiCancelException();
-        case DioErrorType.other:
-          throw ApiUnkownException();
-      }
     } catch (error) {
       log("Error $error", name: 'http_auth.dart:login');
       throw ApiUnkownException();
@@ -93,26 +52,6 @@ class AuthRemote {
 
       log("result ${res.data}", name: 'http_auth.dart:verifyOtp');
       return res.data.toString();
-    } on DioError catch (error) {
-      log("Error $error", name: 'http_auth.dart:verifyOtp');
-
-      switch (error.type) {
-        case DioErrorType.connectTimeout:
-          throw ApiTimeoutException();
-        case DioErrorType.sendTimeout:
-          throw ApiTimeoutException();
-        case DioErrorType.receiveTimeout:
-          throw ApiTimeoutException();
-        case DioErrorType.response:
-          throw ApiResponseException(
-            body: jsonDecode(error.response?.data),
-            type: jsonDecode(error.response?.data)['_type'],
-          );
-        case DioErrorType.cancel:
-          throw ApiCancelException();
-        case DioErrorType.other:
-          throw ApiUnkownException();
-      }
     } catch (error) {
       log("Error $error", name: 'http_auth.dart:verifyOtp');
       throw ApiUnkownException();
@@ -127,26 +66,6 @@ class AuthRemote {
 
       log("result ${res.data}", name: 'http_auth.dart:resendOtp');
       return res.data.toString();
-    } on DioError catch (error) {
-      log("Error $error", name: 'http_auth.dart:resendOtp');
-
-      switch (error.type) {
-        case DioErrorType.connectTimeout:
-          throw ApiTimeoutException();
-        case DioErrorType.sendTimeout:
-          throw ApiTimeoutException();
-        case DioErrorType.receiveTimeout:
-          throw ApiTimeoutException();
-        case DioErrorType.response:
-          throw ApiResponseException(
-            body: jsonDecode(error.response?.data),
-            type: jsonDecode(error.response?.data)['_type'],
-          );
-        case DioErrorType.cancel:
-          throw ApiCancelException();
-        case DioErrorType.other:
-          throw ApiUnkownException();
-      }
     } catch (error) {
       log("Error $error", name: 'http_auth.dart:resendOtp');
       throw ApiUnkownException();

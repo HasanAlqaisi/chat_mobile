@@ -1,6 +1,7 @@
-import 'dart:convert';
 import 'dart:developer' show log;
 
+import 'package:chat_mobile/data/models/conversation_response.dart';
+import 'package:chat_mobile/data/models/chats_response.dart';
 import 'package:chat_mobile/utils/errors/exceptions.dart';
 import 'package:chat_mobile/utils/services/http.dart';
 import 'package:dio/dio.dart';
@@ -11,36 +12,44 @@ class ChatsRemote {
 
   ChatsRemote({required this.dioClient});
 
+  Future<List<ChatsResponse>> getChats(String userId) async {
+    try {
+      final res = await dioClient.dio.get('/chats/user/$userId',
+          options: Options(headers: {'requireToken': true}));
+
+      log("result ${res.data}", name: 'chats_remote.dart:getChats');
+
+      return (res.data as List)
+          .map(
+            (chat) => ChatsResponse.fromMap(chat as Map<String, dynamic>),
+          )
+          .toList();
+    } catch (error) {
+      log("Error $error", name: 'chats_remote.dart:getChats');
+      throw ApiUnkownException();
+    }
+  }
+
+  Future<ConversationResponse> getChat(String chatId) async {
+    try {
+      final res = await dioClient.dio.get('/chats/$chatId/messages',
+          options: Options(headers: {'requireToken': true}));
+
+      log("result ${res.data}", name: 'chats_remote.dart:getChats');
+
+      return ConversationResponse.fromMap(res.data as Map<String, dynamic>);
+    } catch (error) {
+      log("Error $error", name: 'chats_remote.dart:getChats');
+      throw ApiUnkownException();
+    }
+  }
+
   Future<void> deleteChat(String chatId) async {
     try {
       final res = await dioClient.dio.delete('/chats/$chatId',
           options: Options(headers: {'requireToken': true}));
 
       log("result ${res.data}", name: 'chats_remote.dart:deleteChat');
-    } on DioError catch (error) {
-      log("Error $error", name: 'chats_remote.dart:deleteChat');
-
-      switch (error.type) {
-        case DioErrorType.connectTimeout:
-          throw ApiTimeoutException();
-        case DioErrorType.sendTimeout:
-          throw ApiTimeoutException();
-        case DioErrorType.receiveTimeout:
-          throw ApiTimeoutException();
-        case DioErrorType.response:
-          if (error.response?.statusCode == 401) {
-            throw UserNotAuthedException();
-          }
-
-          throw ApiResponseException(
-            body: jsonDecode(error.response?.data),
-            type: jsonDecode(error.response?.data)['_type'],
-          );
-        case DioErrorType.cancel:
-          throw ApiCancelException();
-        case DioErrorType.other:
-          throw ApiUnkownException();
-      }
     } catch (error) {
       log("Error $error", name: 'chats_remote.dart:deleteCha');
       throw ApiUnkownException();
