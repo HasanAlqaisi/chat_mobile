@@ -50,6 +50,7 @@ dependencies:
   cached_network_image: ^3.2.1
   font_awesome_flutter: ^10.1.0
   bubble: ^1.2.1
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:
