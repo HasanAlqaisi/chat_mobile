@@ -53,8 +53,12 @@ class AppRouter extends _i8.RootStackRouter {
           routeData: routeData, child: const _i5.ChatsPage());
     },
     ChatRoute.name: (routeData) {
+      final pathParams = routeData.inheritedPathParams;
+      final args = routeData.argsAs<ChatRouteArgs>(
+          orElse: () => ChatRouteArgs(chatId: pathParams.getString('id')));
       return _i8.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i6.ChatPage());
+          routeData: routeData,
+          child: _i6.ChatPage(key: args.key, chatId: args.chatId));
     },
     UsersRoute.name: (routeData) {
       return _i8.MaterialPageX<dynamic>(
@@ -69,7 +73,7 @@ class AppRouter extends _i8.RootStackRouter {
         _i8.RouteConfig(OtpRoute.name, path: '/otp'),
         _i8.RouteConfig(ForgotPasswordRoute.name, path: '/forgot-pass'),
         _i8.RouteConfig(ChatsRoute.name, path: '/', guards: [authGuard]),
-        _i8.RouteConfig(ChatRoute.name, path: '/chat', guards: [authGuard]),
+        _i8.RouteConfig(ChatRoute.name, path: '/:id', guards: [authGuard]),
         _i8.RouteConfig(UsersRoute.name, path: '/users', guards: [authGuard])
       ];
 }
@@ -117,10 +121,27 @@ class ChatsRoute extends _i8.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i6.ChatPage]
-class ChatRoute extends _i8.PageRouteInfo<void> {
-  const ChatRoute() : super(ChatRoute.name, path: '/chat');
+class ChatRoute extends _i8.PageRouteInfo<ChatRouteArgs> {
+  ChatRoute({_i9.Key? key, required String chatId})
+      : super(ChatRoute.name,
+            path: '/:id',
+            args: ChatRouteArgs(key: key, chatId: chatId),
+            rawPathParams: {'id': chatId});
 
   static const String name = 'ChatRoute';
+}
+
+class ChatRouteArgs {
+  const ChatRouteArgs({this.key, required this.chatId});
+
+  final _i9.Key? key;
+
+  final String chatId;
+
+  @override
+  String toString() {
+    return 'ChatRouteArgs{key: $key, chatId: $chatId}';
+  }
 }
 
 /// generated route for
