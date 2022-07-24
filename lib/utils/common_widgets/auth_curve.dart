@@ -1,4 +1,4 @@
-import 'package:chat_mobile/ui/auth/login/widgets/login_curve_painter.dart';
+import 'package:chat_mobile/auth/presentation/login/widgets/login_curve_painter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
