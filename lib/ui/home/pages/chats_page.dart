@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:chat_mobile/routers/app_paths.dart';
+import 'package:chat_mobile/ui/home/providers/futures.dart';
 import 'package:chat_mobile/ui/home/widgets/chat_item.dart';
 import 'package:chat_mobile/ui/home/widgets/grey_textfield.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,8 @@ class ChatsPage extends ConsumerStatefulWidget {
 class ChatsPageState extends ConsumerState<ChatsPage> {
   @override
   Widget build(BuildContext context) {
+    final chatsProvider = ref.watch(getChatsProvider);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -51,21 +54,27 @@ class ChatsPageState extends ConsumerState<ChatsPage> {
                     size: 16.r,
                   )),
               Expanded(
-                child: ListView(
-                  children: [
-                    ...List.generate(
-                      10,
-                      (index) => Padding(
-                        padding: EdgeInsets.symmetric(vertical: 16.0.h),
-                        child: GestureDetector(
-                          onTap: () =>
-                              AutoRouter.of(context).pushNamed(AppPaths.chat),
-                          child: const ChatItem(),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
+                child: chatsProvider.when(
+                    data: (chatsOrFailure) {
+                      final chats = chatsOrFailure.data;
+
+                      return ListView.builder(
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16.0.h),
+                            child: GestureDetector(
+                              onTap: () => AutoRouter.of(context)
+                                  .pushNamed('/${chats![index].chatId}'),
+                              child: ChatItem(data: chats![index]),
+                            ),
+                          );
+                        },
+                        itemCount: chats?.length ?? 0,
+                      );
+                    },
+                    error: (err, _) => Text('Error $err'),
+                    loading: () =>
+                        const Center(child: CircularProgressIndicator())),
               ),
             ],
           ),

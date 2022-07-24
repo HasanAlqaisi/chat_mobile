@@ -5,17 +5,20 @@ import 'package:google_fonts/google_fonts.dart';
 class GreyTextField extends StatelessWidget {
   final String hint;
   final Icon? icon;
+  final TextEditingController? textController;
 
   const GreyTextField({
     Key? key,
     required this.hint,
     this.icon,
+    this.textController,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       cursorColor: Colors.grey,
+      controller: textController,
       decoration: InputDecoration(
         fillColor: const Color(0xFFF7F7FC),
         filled: true,

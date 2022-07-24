@@ -1,11 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chat_mobile/data/models/chats_response.dart';
+import 'package:chat_mobile/utils/constants/assets_path.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ChatItem extends StatelessWidget {
+  final ChatsResponse data;
+
   const ChatItem({
     Key? key,
+    required this.data,
   }) : super(key: key);
 
   @override
@@ -22,22 +27,24 @@ class ChatItem extends StatelessWidget {
               borderRadius: BorderRadius.circular(10.r), // Image border
               child: SizedBox.fromSize(
                   size: Size.fromRadius(38.r), // Image radius
-                  child: CachedNetworkImage(
-                      fit: BoxFit.cover,
-                      imageUrl:
-                          'https://i.ibb.co/KKnRXhp/photo-2022-04-07-01-31-50.jpg')),
+                  child: data.userImage != null
+                      ? CachedNetworkImage(
+                          fit: BoxFit.cover,
+                          imageUrl: data.userImage!,
+                        )
+                      : Image.asset(AssetsPath.profilePlaceHolder)),
             ),
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Text(
-                'Hasan Alqaisi',
+                data.username,
                 style: GoogleFonts.mulish(
                     fontSize: 16.sp, fontWeight: FontWeight.w500),
               ),
               Text(
-                'Good morning',
+                data.message.content,
                 style: GoogleFonts.mulish(
                     fontSize: 14.sp, color: const Color(0xFFADB5BD)),
               ),
