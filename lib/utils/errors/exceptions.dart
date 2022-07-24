@@ -24,3 +24,10 @@ class ApiUnkownException implements Exception {
 }
 
 class UserNotAuthedException implements Exception {}
+
+class IncorrectKeyException implements Exception {
+  final String key;
+  final String? message;
+
+  IncorrectKeyException({required this.key, this.message});
+}
