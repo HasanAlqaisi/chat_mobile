@@ -4,7 +4,7 @@ import 'package:chat_mobile/utils/constants/secrets.dart';
 import 'package:chat_mobile/utils/errors/data_or_failure.dart';
 import 'package:chat_mobile/utils/errors/exceptions.dart';
 import 'package:chat_mobile/utils/errors/failures.dart';
-import 'package:chat_mobile/utils/errors/handle_response_errors.dart';
+import 'package:chat_mobile/utils/errors/handle_response_exception.dart';
 import 'package:chat_mobile/utils/storage/secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jwt_decode/jwt_decode.dart';
@@ -41,7 +41,7 @@ class MessagesRepo {
     } on ApiTimeoutException catch (_) {
       return DataOrFailure(failure: ApiTimeoutFailure());
     } on ApiResponseException catch (error) {
-      return DataOrFailure(failure: handleResponseErrors(error));
+      return DataOrFailure(failure: handleResponseException(error));
     } on ApiCancelException catch (_) {
       return DataOrFailure(failure: ApiCancelFailure());
     } on ApiUnkownException catch (_) {

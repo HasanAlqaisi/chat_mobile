@@ -41,8 +41,9 @@ class TokenInterceptors extends Interceptor {
 
         handler.resolve(Response(requestOptions: options));
       }
+    } else {
+      handler.next(options);
     }
-    handler.next(options);
   }
 
   @override

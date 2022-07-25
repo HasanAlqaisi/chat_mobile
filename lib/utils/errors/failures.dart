@@ -1,9 +1,4 @@
-class FieldErrors {
-  String fieldName;
-  List<String> errors;
-
-  FieldErrors({required this.fieldName, required this.errors});
-}
+import 'package:chat_mobile/utils/errors/field_errors_model.dart';
 
 abstract class Failure {}
 
@@ -32,11 +27,14 @@ class ApiFieldsFailure implements Failure {
 
   factory ApiFieldsFailure.decodeFieldsErrors(Map<String, dynamic> body) {
     List<FieldErrors> fieldErrors = [];
+
     body["fieldErrors"].forEach((key, value) {
       List<String> errors = [];
+
       value.forEach((error) => errors.add(error));
       fieldErrors.add(FieldErrors(fieldName: key, errors: errors));
     });
+
     return ApiFieldsFailure._(fieldErrors: fieldErrors);
   }
 }
@@ -48,8 +46,11 @@ class ApiGeneralFailure implements Failure {
 
   factory ApiGeneralFailure.fromJson(Map<String, dynamic> json) {
     final detail = json['detail'];
+
     return ApiGeneralFailure._(detail: detail ?? "not detail error");
   }
 }
 
 class UserNotAuthedFailure implements Failure {}
+
+class IncorrectKeyFailure implements Failure {}

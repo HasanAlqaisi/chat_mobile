@@ -1,12 +1,12 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:chat_mobile/auth/presentation/otp/providers/otp_notifier.dart';
+import 'package:chat_mobile/auth/presentation/otp/providers/resend_otp_notifier.dart';
+import 'package:chat_mobile/auth/presentation/otp/providers/verify_otp_notifier.dart';
 import 'package:chat_mobile/auth/presentation/otp/widgets/otp_image.dart';
 import 'package:chat_mobile/auth/presentation/signup/providers/state_providers.dart';
 import 'package:chat_mobile/routers/app_router.gr.dart';
 import 'package:chat_mobile/utils/app_colors.dart';
-import 'package:chat_mobile/utils/errors/data_or_failure.dart';
-import 'package:chat_mobile/utils/errors/failures.dart';
-import 'package:chat_mobile/utils/errors/get_message_failure.dart';
+import 'package:chat_mobile/utils/errors/failure_extension.dart';
+import 'package:chat_mobile/utils/errors/map_exception_to_failure.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -35,43 +35,28 @@ class OtpPageState extends ConsumerState<OtpPage> {
 
   @override
   Widget build(BuildContext context) {
-    final verifyOtpNotifier = ref.watch(verifyOtpNotifierProvider.notifier);
     final phoneNumber = ref.watch(phoneSignupProvider.notifier).state;
 
-    ref.listen<DataOrFailure<String, Failure>?>(
+    ref.listen<AsyncValue<String?>>(
       verifyOtpNotifierProvider,
-      ((previous, next) {
-        if (next != null) {
-          if (next.failure == null && next.data != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(next.data!)),
-            );
-            AutoRouter.of(context)
-                .pushAndPopUntil(const LoginRoute(), predicate: (_) => false);
-          } else if (next.failure != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(next.failure!.getMessage())),
-            );
-          }
-        }
-      }),
+      ((_, state) => state.whenOrNull(
+          error: (exception, _) =>
+              mapExceptionToFailure(exception).showSnackBar(context),
+          data: (_) => AutoRouter.of(context)
+              .pushAndPopUntil(const LoginRoute(), predicate: (_) => false))),
     );
 
-    ref.listen<DataOrFailure<String, Failure>?>(
+    ref.listen<AsyncValue<String?>>(
       resendOtpNotifierProvider,
-      ((previous, next) {
-        if (next != null) {
-          if (next.failure == null && next.data != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(next.data!)),
-            );
-          } else if (next.failure != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(next.failure!.getMessage())),
-            );
-          }
-        }
-      }),
+      ((_, state) => state.whenOrNull(
+            error: (exception, _) =>
+                mapExceptionToFailure(exception).showSnackBar(context),
+            data: (data) => data != null
+                ? ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(data)),
+                  )
+                : null,
+          )),
     );
 
     return Scaffold(
@@ -123,8 +108,9 @@ class OtpPageState extends ConsumerState<OtpPage> {
                 animationDuration: const Duration(milliseconds: 300),
                 enableActiveFill: true,
                 onChanged: (code) {},
-                onCompleted: (code) async =>
-                    await verifyOtpNotifier.verifyOtp(code),
+                onCompleted: (code) async => await ref
+                    .watch(verifyOtpNotifierProvider.notifier)
+                    .verifyOtp(code),
                 beforeTextPaste: (_) => true,
               ),
               SizedBox(height: 27.h),

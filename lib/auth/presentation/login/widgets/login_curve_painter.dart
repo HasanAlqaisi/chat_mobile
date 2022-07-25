@@ -7,8 +7,6 @@ class LoginCurvePainter extends CustomPainter {
     Paint paint = Paint();
     Path path = Path();
 
-    // Path number 1
-
     paint.color = Color(AppColors.curveColor).withOpacity(0.3);
     path = Path();
     path.lineTo(0, size.height * 0.8);

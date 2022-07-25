@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:chat_mobile/chat/presentation/providers/futures.dart';
 import 'package:chat_mobile/chat/presentation/providers/providers.dart';
 import 'package:chat_mobile/chat/presentation/providers/state_notifiers.dart';
 import 'package:chat_mobile/chat/presentation/widgets/chat_bubble.dart';
@@ -33,9 +32,9 @@ class ChatPageState extends ConsumerState<ChatPage> {
     final chat = ref.watch(chatStateNotifierProvider);
     final contentController = ref.watch(contentControllerProvider);
 
-    ref
-        .watch(getCurrentUserIdProvider.future)
-        .then(((value) => currentUserId = value));
+    // ref
+    //     .watch(getCurrentUserIdProvider.future)
+    //     .then(((value) => currentUserId = value));
 
     return Scaffold(
       backgroundColor: const Color(0xFFF7F7FC),

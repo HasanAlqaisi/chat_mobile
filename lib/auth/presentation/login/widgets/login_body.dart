@@ -1,14 +1,14 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:chat_mobile/auth/presentation/login/providers/login_notifier.dart';
-import 'package:chat_mobile/auth/presentation/login/providers/state_providers.dart';
+import 'package:chat_mobile/auth/domain/login_info.dart';
+import 'package:chat_mobile/auth/presentation/login/controllers/login_controller.dart';
+import 'package:chat_mobile/auth/presentation/login/controllers/state_providers.dart';
 import 'package:chat_mobile/routers/app_paths.dart';
 import 'package:chat_mobile/routers/app_router.gr.dart';
 import 'package:chat_mobile/utils/app_colors.dart';
 import 'package:chat_mobile/utils/common_widgets/auth_button.dart';
 import 'package:chat_mobile/utils/common_widgets/auth_text_field.dart';
-import 'package:chat_mobile/utils/errors/data_or_failure.dart';
-import 'package:chat_mobile/utils/errors/failures.dart';
-import 'package:chat_mobile/utils/errors/get_message_failure.dart';
+import 'package:chat_mobile/utils/errors/failure_extension.dart';
+import 'package:chat_mobile/utils/errors/map_exception_to_failure.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -29,27 +29,26 @@ class LoginBodyState extends ConsumerState<LoginBody> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<DataOrFailure<dynamic, Failure>?>(
-      loginNotifierProvider,
-      ((previous, current) {
-        if (current != null) {
-          if (current.failure != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(current.failure!.getMessage())),
-            );
-          } else if (current.data != null) {
-            AutoRouter.of(context)
-                .pushAndPopUntil(const ChatsRoute(), predicate: (_) => false);
-          }
-        }
+    ref.listen<AsyncValue<LoginInfo?>>(
+      loginControllerProvider,
+      ((_, state) {
+        state.whenOrNull(
+          error: (exception, _) =>
+              mapExceptionToFailure(exception).showSnackBar(context),
+          data: (loginInfo) => loginInfo != null
+              ? AutoRouter.of(context)
+                  .pushAndPopUntil(const ChatsRoute(), predicate: (_) => false)
+              : null,
+        );
       }),
     );
 
-    final phoneProvider = ref.watch(phoneTextProvider.notifier);
-    final passwordProvider = ref.watch(passwordTextProvider.notifier);
+    final phoneProvider = ref.watch(loginPhoneTextProvider.notifier);
+    final passwordProvider = ref.watch(loginPasswordTextProvider.notifier);
 
     final shouldButtonEnabled = ref.watch(buttonEnabledProvider);
-    final shouldShowIndicator = ref.watch(loginNotifierProvider);
+    final shouldShowIndicator =
+        ref.watch(loginControllerProvider) is AsyncLoading;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -117,7 +116,7 @@ class LoginBodyState extends ConsumerState<LoginBody> {
               ),
               AuthButton(
                 text: 'Login',
-                showIndicator: shouldShowIndicator == null,
+                showIndicator: shouldShowIndicator,
                 padding: EdgeInsets.symmetric(vertical: 12.h),
                 fontSize: 24.sp,
                 fontWeight: FontWeight.bold,
@@ -128,8 +127,10 @@ class LoginBodyState extends ConsumerState<LoginBody> {
                 onPressed: shouldButtonEnabled
                     ? () async {
                         if (_formKey.currentState!.validate()) {
-                          await ref.read(loginNotifierProvider.notifier).login(
-                              phoneProvider.state, passwordProvider.state);
+                          await ref
+                              .read(loginControllerProvider.notifier)
+                              .login(
+                                  phoneProvider.state, passwordProvider.state);
                         }
                       }
                     : null,

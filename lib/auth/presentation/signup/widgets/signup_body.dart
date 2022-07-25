@@ -5,10 +5,9 @@ import 'package:chat_mobile/routers/app_paths.dart';
 import 'package:chat_mobile/utils/app_colors.dart';
 import 'package:chat_mobile/utils/common_widgets/auth_button.dart';
 import 'package:chat_mobile/utils/common_widgets/auth_text_field.dart';
-import 'package:chat_mobile/utils/errors/data_or_failure.dart';
-import 'package:chat_mobile/utils/errors/failures.dart';
-import 'package:chat_mobile/utils/errors/get_message_failure.dart';
-import 'package:collection/collection.dart';
+import 'package:chat_mobile/utils/errors/async_value_extension.dart';
+import 'package:chat_mobile/utils/errors/failure_extension.dart';
+import 'package:chat_mobile/utils/errors/map_exception_to_failure.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -31,32 +30,20 @@ class SignupBodyState extends ConsumerState<SignupBody> {
   Widget build(BuildContext context) {
     final buttonEnabledState = ref.watch(signupButtonEnabled);
     final state = ref.watch(signupNotifierProvider);
-    final failure = state?.failure;
 
     final usernameProvider = ref.watch(usernameSignupProvider.notifier);
     final phoneProvider = ref.watch(phoneSignupProvider.notifier);
     final passwordProvider = ref.watch(passwordSignupProvider.notifier);
 
-    ref.listen<DataOrFailure<dynamic, Failure>?>(
+    ref.listen<AsyncValue<String?>>(
       signupNotifierProvider,
-      ((previous, current) {
-        if (current != null) {
-          if (current.failure == null && current.data != null) {
-            AutoRouter.of(context).pushNamed(AppPaths.otp);
-          } else if (current.failure != null &&
-              current.failure is! ApiFieldsFailure) {
-            showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: const Text("error"),
-                  content: Text((current.failure!.getMessage())),
-                );
-              },
-            );
-          }
-        }
-      }),
+      ((_, state) => state.whenOrNull(
+            error: (exception, _) =>
+                mapExceptionToFailure(exception).showSimpleDialog(context),
+            data: (data) => data != null
+                ? AutoRouter.of(context).pushNamed(AppPaths.otp)
+                : null,
+          )),
     );
 
     return Form(
@@ -76,15 +63,7 @@ class SignupBodyState extends ConsumerState<SignupBody> {
               AuthTextField(
                 labelText: "Username",
                 onChanged: (value) => usernameProvider.state = value,
-                errorText: failure is ApiFieldsFailure
-                    ? (failure)
-                        .fieldErrors
-                        .firstWhereOrNull(
-                          (fieldError) => fieldError?.fieldName == "username",
-                        )
-                        ?.errors
-                        .first
-                    : null,
+                errorText: state.showErrorField('username'),
                 contentPadding: EdgeInsets.all(20.0.r),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -99,16 +78,7 @@ class SignupBodyState extends ConsumerState<SignupBody> {
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.all(20.r),
                   labelText: 'Phone Number',
-                  errorText: failure is ApiFieldsFailure
-                      ? (failure)
-                          .fieldErrors
-                          .firstWhereOrNull(
-                            (fieldError) =>
-                                fieldError?.fieldName == "phoneNumber",
-                          )
-                          ?.errors
-                          .first
-                      : null,
+                  errorText: state.showErrorField('phoneNumber'),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(5.0.r),
                   ),
@@ -130,15 +100,7 @@ class SignupBodyState extends ConsumerState<SignupBody> {
               AuthTextField(
                 labelText: "Password",
                 onChanged: (value) => passwordProvider.state = value,
-                errorText: failure is ApiFieldsFailure
-                    ? (failure)
-                        .fieldErrors
-                        .firstWhereOrNull(
-                          (fieldError) => fieldError?.fieldName == "password",
-                        )
-                        ?.errors
-                        .first
-                    : null,
+                errorText: state.showErrorField('password'),
                 contentPadding: EdgeInsets.all(20.0.r),
                 borderRadius: 5,
                 validator: (value) {
@@ -153,7 +115,7 @@ class SignupBodyState extends ConsumerState<SignupBody> {
                 padding: EdgeInsets.only(top: 34.0.h, bottom: 6.h),
                 child: AuthButton(
                   text: 'Signup',
-                  showIndicator: state == null,
+                  showIndicator: state is AsyncLoading,
                   padding: EdgeInsets.symmetric(vertical: 12.h),
                   fontSize: 24.sp,
                   fontWeight: FontWeight.bold,

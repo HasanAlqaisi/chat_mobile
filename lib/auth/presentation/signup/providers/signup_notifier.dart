@@ -1,30 +1,30 @@
 import 'package:chat_mobile/auth/data/auth_repo.dart';
-import 'package:chat_mobile/utils/errors/data_or_failure.dart';
-import 'package:chat_mobile/utils/errors/failures.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SignupNotifier extends StateNotifier<DataOrFailure<String, Failure>?> {
-  final Ref ref;
+class SignupNotifier extends StateNotifier<AsyncValue<String?>> {
   final AuthRepo authRepo;
 
-  SignupNotifier(this.ref, this.authRepo) : super(DataOrFailure());
+  SignupNotifier(this.authRepo) : super(const AsyncData(null));
 
   Future<void> signup(
     String username,
     String phoneNumber,
     String password,
   ) async {
-    state = null;
-    final result = await authRepo.signup(username, phoneNumber, password);
-    state = result;
+    state = const AsyncLoading();
+
+    final signup = authRepo.signup;
+
+    state =
+        await AsyncValue.guard(() => signup(username, phoneNumber, password));
   }
 }
 
-final signupNotifierProvider = StateNotifierProvider.autoDispose<SignupNotifier,
-    DataOrFailure<dynamic, Failure>?>(
+final signupNotifierProvider =
+    StateNotifierProvider.autoDispose<SignupNotifier, AsyncValue<String?>>(
   (ref) {
     final authRepo = ref.watch(authRepoProvider);
 
-    return SignupNotifier(ref, authRepo);
+    return SignupNotifier(authRepo);
   },
 );
