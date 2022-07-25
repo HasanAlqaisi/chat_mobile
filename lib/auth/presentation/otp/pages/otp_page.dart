@@ -1,8 +1,8 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:chat_mobile/auth/presentation/otp/providers/resend_otp_notifier.dart';
-import 'package:chat_mobile/auth/presentation/otp/providers/verify_otp_notifier.dart';
+import 'package:chat_mobile/auth/presentation/otp/controllers/resend_otp_controller.dart';
+import 'package:chat_mobile/auth/presentation/otp/controllers/verify_otp_controller.dart';
 import 'package:chat_mobile/auth/presentation/otp/widgets/otp_image.dart';
-import 'package:chat_mobile/auth/presentation/signup/providers/state_providers.dart';
+import 'package:chat_mobile/auth/presentation/signup/controllers/state_providers.dart';
 import 'package:chat_mobile/routers/app_router.gr.dart';
 import 'package:chat_mobile/utils/app_colors.dart';
 import 'package:chat_mobile/utils/errors/failure_extension.dart';
@@ -29,7 +29,7 @@ class OtpPageState extends ConsumerState<OtpPage> {
     super.initState();
     _onResendTap = TapGestureRecognizer()
       ..onTap = () {
-        ref.read(resendOtpNotifierProvider.notifier).resendOtp();
+        ref.read(resendOtpControllerProvider.notifier).resendOtp();
       };
   }
 
@@ -38,7 +38,7 @@ class OtpPageState extends ConsumerState<OtpPage> {
     final phoneNumber = ref.watch(phoneSignupProvider.notifier).state;
 
     ref.listen<AsyncValue<String?>>(
-      verifyOtpNotifierProvider,
+      verifyOtpControllerProvider,
       ((_, state) => state.whenOrNull(
           error: (exception, _) =>
               mapExceptionToFailure(exception).showSnackBar(context),
@@ -47,7 +47,7 @@ class OtpPageState extends ConsumerState<OtpPage> {
     );
 
     ref.listen<AsyncValue<String?>>(
-      resendOtpNotifierProvider,
+      resendOtpControllerProvider,
       ((_, state) => state.whenOrNull(
             error: (exception, _) =>
                 mapExceptionToFailure(exception).showSnackBar(context),
@@ -109,7 +109,7 @@ class OtpPageState extends ConsumerState<OtpPage> {
                 enableActiveFill: true,
                 onChanged: (code) {},
                 onCompleted: (code) async => await ref
-                    .watch(verifyOtpNotifierProvider.notifier)
+                    .watch(verifyOtpControllerProvider.notifier)
                     .verifyOtp(code),
                 beforeTextPaste: (_) => true,
               ),

@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:chat_mobile/auth/presentation/signup/providers/signup_notifier.dart';
-import 'package:chat_mobile/auth/presentation/signup/providers/state_providers.dart';
+import 'package:chat_mobile/auth/presentation/signup/controllers/signup_controller.dart';
+import 'package:chat_mobile/auth/presentation/signup/controllers/state_providers.dart';
 import 'package:chat_mobile/routers/app_paths.dart';
 import 'package:chat_mobile/utils/app_colors.dart';
 import 'package:chat_mobile/utils/common_widgets/auth_button.dart';
@@ -29,14 +29,14 @@ class SignupBodyState extends ConsumerState<SignupBody> {
   @override
   Widget build(BuildContext context) {
     final buttonEnabledState = ref.watch(signupButtonEnabled);
-    final state = ref.watch(signupNotifierProvider);
+    final state = ref.watch(signupControllerProvider);
 
     final usernameProvider = ref.watch(usernameSignupProvider.notifier);
     final phoneProvider = ref.watch(phoneSignupProvider.notifier);
     final passwordProvider = ref.watch(passwordSignupProvider.notifier);
 
     ref.listen<AsyncValue<String?>>(
-      signupNotifierProvider,
+      signupControllerProvider,
       ((_, state) => state.whenOrNull(
             error: (exception, _) =>
                 mapExceptionToFailure(exception).showSimpleDialog(context),
@@ -127,7 +127,7 @@ class SignupBodyState extends ConsumerState<SignupBody> {
                       ? () async {
                           if (_formKey.currentState!.validate()) {
                             await ref
-                                .read(signupNotifierProvider.notifier)
+                                .read(signupControllerProvider.notifier)
                                 .signup(
                                   usernameProvider.state,
                                   phoneProvider.state,

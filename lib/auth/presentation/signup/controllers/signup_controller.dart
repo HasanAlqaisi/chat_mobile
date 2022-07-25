@@ -1,10 +1,10 @@
 import 'package:chat_mobile/auth/data/auth_repo.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SignupNotifier extends StateNotifier<AsyncValue<String?>> {
+class SignupController extends StateNotifier<AsyncValue<String?>> {
   final AuthRepo authRepo;
 
-  SignupNotifier(this.authRepo) : super(const AsyncData(null));
+  SignupController(this.authRepo) : super(const AsyncData(null));
 
   Future<void> signup(
     String username,
@@ -20,11 +20,11 @@ class SignupNotifier extends StateNotifier<AsyncValue<String?>> {
   }
 }
 
-final signupNotifierProvider =
-    StateNotifierProvider.autoDispose<SignupNotifier, AsyncValue<String?>>(
+final signupControllerProvider =
+    StateNotifierProvider.autoDispose<SignupController, AsyncValue<String?>>(
   (ref) {
     final authRepo = ref.watch(authRepoProvider);
 
-    return SignupNotifier(authRepo);
+    return SignupController(authRepo);
   },
 );

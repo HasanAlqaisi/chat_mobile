@@ -1,4 +1,4 @@
-import 'package:chat_mobile/auth/presentation/signup/providers/signup_notifier.dart';
+import 'package:chat_mobile/auth/presentation/signup/controllers/signup_controller.dart';
 import 'package:chat_mobile/utils/errors/failures.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -10,7 +10,7 @@ final signupButtonEnabled = Provider.autoDispose((ref) {
   final username = ref.watch(usernameSignupProvider);
   final phone = ref.watch(phoneSignupProvider);
   final password = ref.watch(passwordSignupProvider);
-  final data = ref.watch(signupNotifierProvider);
+  final data = ref.watch(signupControllerProvider);
 
   return username.trim().isNotEmpty &&
       phone.trim().isNotEmpty &&
