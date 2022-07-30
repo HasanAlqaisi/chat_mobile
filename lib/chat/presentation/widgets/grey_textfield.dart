@@ -6,12 +6,14 @@ class GreyTextField extends StatelessWidget {
   final String hint;
   final Icon? icon;
   final TextEditingController? textController;
+  final Function(String)? onChanged;
 
   const GreyTextField({
     Key? key,
     required this.hint,
     this.icon,
     this.textController,
+    this.onChanged,
   }) : super(key: key);
 
   @override
@@ -19,6 +21,7 @@ class GreyTextField extends StatelessWidget {
     return TextField(
       cursorColor: Colors.grey,
       controller: textController,
+      onChanged: onChanged,
       decoration: InputDecoration(
         fillColor: const Color(0xFFF7F7FC),
         filled: true,

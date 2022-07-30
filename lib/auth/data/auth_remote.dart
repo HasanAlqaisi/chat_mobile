@@ -1,5 +1,7 @@
 import 'package:chat_mobile/auth/domain/login_info.dart';
+import 'package:chat_mobile/auth/domain/user.dart';
 import 'package:chat_mobile/utils/services/http.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AuthRemote {
@@ -45,6 +47,18 @@ class AuthRemote {
     });
 
     return res.data.toString();
+  }
+
+  Future<List<User>> searchUsers(String? query) async {
+    final res = await dioClient.dio.get(
+      '/users/',
+      options: Options(headers: {'requireToken': true}),
+      queryParameters: {
+        'query': query,
+      },
+    );
+
+    return (res.data as List).map((user) => User.fromMap(user)).toList();
   }
 }
 

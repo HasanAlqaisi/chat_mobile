@@ -1,4 +1,7 @@
 import 'package:chat_mobile/chat/presentation/widgets/grey_textfield.dart';
+import 'package:chat_mobile/chat/presentation/widgets/user_item.dart';
+import 'package:chat_mobile/utils/services/auth_controller.dart';
+import 'package:chat_mobile/utils/services/user_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,12 +11,26 @@ class UsersPage extends ConsumerStatefulWidget {
   const UsersPage({Key? key}) : super(key: key);
 
   @override
-  ChatsPageState createState() => ChatsPageState();
+  UsersPageState createState() => UsersPageState();
 }
 
-class ChatsPageState extends ConsumerState<UsersPage> {
+class UsersPageState extends ConsumerState<UsersPage> {
+  String? currentUserId;
+
+  @override
+  void initState() {
+    super.initState();
+    ref.read(authControllerProvider.notifier).getUserId();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(usersControllerProvider);
+
+    final users = state.asData?.value;
+
+    ref.watch(authControllerProvider.future).then(((value) => currentUserId = value));
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -33,12 +50,25 @@ class ChatsPageState extends ConsumerState<UsersPage> {
           child: Column(
             children: [
               GreyTextField(
-                  hint: 'serach',
-                  icon: Icon(
-                    Icons.search,
-                    color: const Color(0xFFADB5BD),
-                    size: 16.r,
-                  )),
+                hint: 'serach',
+                icon: Icon(
+                  Icons.search,
+                  color: const Color(0xFFADB5BD),
+                  size: 16.r,
+                ),
+                onChanged: (query) => ref
+                    .watch(usersControllerProvider.notifier)
+                    .searchUsers(query),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: users?.length ?? 0,
+                  itemBuilder: (context, index) => Padding(
+                    padding: EdgeInsets.all(12.0.r),
+                    child: UserItem(user: users?[index], currentUserId: currentUserId,),
+                  ),
+                ),
+              )
             ],
           ),
         ),

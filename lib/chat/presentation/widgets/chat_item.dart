@@ -44,7 +44,7 @@ class ChatItem extends StatelessWidget {
                     fontSize: 16.sp, fontWeight: FontWeight.w500),
               ),
               Text(
-                data.message.content,
+                data.message?.content ?? 'No messages',
                 style: GoogleFonts.mulish(
                     fontSize: 14.sp, color: const Color(0xFFADB5BD)),
               ),

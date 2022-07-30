@@ -1,5 +1,6 @@
 import 'package:chat_mobile/auth/data/auth_remote.dart';
 import 'package:chat_mobile/auth/domain/login_info.dart';
+import 'package:chat_mobile/auth/domain/user.dart';
 import 'package:chat_mobile/utils/constants/secrets.dart';
 import 'package:chat_mobile/utils/errors/exceptions.dart';
 import 'package:chat_mobile/utils/extensions/jwt.dart';
@@ -7,11 +8,11 @@ import 'package:chat_mobile/utils/storage/secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AuthRepo {
-  final AuthRemote httpAuth;
+  final AuthRemote authRemote;
   final SecureStorage secureStorage;
 
   AuthRepo({
-    required this.httpAuth,
+    required this.authRemote,
     required this.secureStorage,
   });
 
@@ -41,7 +42,7 @@ class AuthRepo {
     String password,
   ) async {
     try {
-      final result = await httpAuth.signup(username, phoneNumber, password);
+      final result = await authRemote.signup(username, phoneNumber, password);
 
       return result;
     } catch (_) {
@@ -54,7 +55,7 @@ class AuthRepo {
     String password,
   ) async {
     try {
-      final result = await httpAuth.login(phoneNumber, password);
+      final result = await authRemote.login(phoneNumber, password);
 
       await secureStorage.writeToken(Secrets.tokenKey, result.accessToken);
 
@@ -69,7 +70,7 @@ class AuthRepo {
     String password,
   ) async {
     try {
-      final result = await httpAuth.verifyOtp(phoneNumber, password);
+      final result = await authRemote.verifyOtp(phoneNumber, password);
 
       return result;
     } catch (_) {
@@ -77,11 +78,19 @@ class AuthRepo {
     }
   }
 
-  Future<String> resendOtp(
-    String phoneNumber,
-  ) async {
+  Future<String> resendOtp(String phoneNumber) async {
     try {
-      final result = await httpAuth.resendOtp(phoneNumber);
+      final result = await authRemote.resendOtp(phoneNumber);
+
+      return result;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<User>> searchUsers(String? query) async {
+    try {
+      final result = await authRemote.searchUsers(query);
 
       return result;
     } catch (e) {
@@ -94,5 +103,5 @@ final authRepoProvider = Provider<AuthRepo>((ref) {
   final httpAuth = ref.watch(authRemoteProvider);
   final appSecureStorage = ref.watch(appSecureStorageProvider);
 
-  return AuthRepo(httpAuth: httpAuth, secureStorage: appSecureStorage);
+  return AuthRepo(authRemote: httpAuth, secureStorage: appSecureStorage);
 });

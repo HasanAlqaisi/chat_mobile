@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 import 'package:chat_mobile/chat/domain/latest_message.dart';
@@ -8,7 +9,7 @@ class ChatsResponse {
   String username;
   String? userImage;
   int countNewMessages;
-  LatestMessage message;
+  LatestMessage? message;
 
   ChatsResponse({
     required this.chatId,
@@ -16,7 +17,7 @@ class ChatsResponse {
     required this.username,
     this.userImage,
     required this.countNewMessages,
-    required this.message,
+    this.message,
   });
 
   ChatsResponse copyWith({
@@ -44,7 +45,7 @@ class ChatsResponse {
       'username': username,
       'userImage': userImage,
       'countNewMessages': countNewMessages,
-      'message': message.toMap(),
+      'message': message?.toMap(),
     };
   }
 
@@ -55,18 +56,15 @@ class ChatsResponse {
       username: map['username'] as String,
       userImage: map['userImage'] != null ? map['userImage'] as String : null,
       countNewMessages: map['countNewMessages'] as int,
-      message: LatestMessage.fromMap(map['message'] as Map<String, dynamic>),
+      message: map['message'] != null
+          ? LatestMessage.fromMap(map['message'] as Map<String, dynamic>)
+          : null,
     );
   }
 
-  String toJson() => json.encode(toMap());
-
-  factory ChatsResponse.fromJson(String source) =>
-      ChatsResponse.fromMap(json.decode(source) as Map<String, dynamic>);
-
   @override
   String toString() {
-    return 'ChatResponse(chatId: $chatId, receiverApprove: $receiverApprove, username: $username, userImage: $userImage, countNewMessages: $countNewMessages, message: $message)';
+    return 'ChatsResponse(chatId: $chatId, receiverApprove: $receiverApprove, username: $username, userImage: $userImage, countNewMessages: $countNewMessages, message: $message)';
   }
 
   @override

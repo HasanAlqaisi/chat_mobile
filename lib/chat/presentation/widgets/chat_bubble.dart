@@ -1,4 +1,4 @@
-import 'package:chat_mobile/chat/domain/conversation_response.dart';
+import 'package:chat_mobile/chat/domain/conversation_message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';

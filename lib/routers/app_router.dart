@@ -31,13 +31,13 @@ final appRouterProvider = Provider<AppRouter>((ref) {
       guards: [AuthGuard],
     ),
     AutoRoute(
-      page: ChatPage,
-      path: '/:id',
+      page: UsersPage,
+      path: AppPaths.users,
       guards: [AuthGuard],
     ),
     AutoRoute(
-      page: UsersPage,
-      path: AppPaths.users,
+      page: ChatPage,
+      path: '/:id',
       guards: [AuthGuard],
     ),
   ],

@@ -13,7 +13,7 @@ class DioClient {
     required this.tokenInterceptors,
   }) {
     dio = Dio();
-    dio.options.baseUrl = 'http://192.168.0.103:3000';
+    dio.options.baseUrl = 'http://192.168.0.101:3000';
     dio.interceptors.addAll([loggingInterceptors, tokenInterceptors]);
   }
 }

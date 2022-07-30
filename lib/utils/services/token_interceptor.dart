@@ -57,8 +57,8 @@ class TokenInterceptors extends Interceptor {
         throw ApiTimeoutException();
       case DioErrorType.response:
         throw ApiResponseException(
-          body: jsonDecode(err.response?.data),
-          type: jsonDecode(err.response?.data)['_type'],
+          body: err.response?.data,
+          type: err.response?.data['_type'],
         );
       case DioErrorType.cancel:
         throw ApiCancelException();
