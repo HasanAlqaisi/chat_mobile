@@ -13,14 +13,14 @@
 import 'package:auto_route/auto_route.dart' as _i8;
 import 'package:flutter/material.dart' as _i9;
 
-import '../auth/presentation/forgot_password/pages/forgot_password_page.dart'
+import '../app/auth/presentation/forgot_password/pages/forgot_password_page.dart'
     as _i4;
-import '../auth/presentation/login/pages/login_page.dart' as _i1;
-import '../auth/presentation/otp/pages/otp_page.dart' as _i3;
-import '../auth/presentation/signup/pages/signup_page.dart' as _i2;
-import '../chat/presentation/pages/chat_page.dart' as _i7;
-import '../chat/presentation/pages/chats_page.dart' as _i5;
-import '../chat/presentation/pages/users_page.dart' as _i6;
+import '../app/auth/presentation/login/pages/login_page.dart' as _i1;
+import '../app/auth/presentation/otp/pages/otp_page.dart' as _i3;
+import '../app/auth/presentation/signup/pages/signup_page.dart' as _i2;
+import '../app/chat/presentation/pages/chat_page.dart' as _i7;
+import '../app/chat/presentation/pages/chats_page.dart' as _i5;
+import '../app/chat/presentation/pages/users_page.dart' as _i6;
 import 'auth_guard.dart' as _i10;
 
 class AppRouter extends _i8.RootStackRouter {

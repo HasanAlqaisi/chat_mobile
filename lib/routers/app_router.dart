@@ -1,10 +1,10 @@
-import 'package:chat_mobile/auth/presentation/forgot_password/pages/forgot_password_page.dart';
-import 'package:chat_mobile/auth/presentation/login/pages/login_page.dart';
-import 'package:chat_mobile/auth/presentation/otp/pages/otp_page.dart';
-import 'package:chat_mobile/auth/presentation/signup/pages/signup_page.dart';
-import 'package:chat_mobile/chat/presentation/pages/chat_page.dart';
-import 'package:chat_mobile/chat/presentation/pages/chats_page.dart';
-import 'package:chat_mobile/chat/presentation/pages/users_page.dart';
+import 'package:chat_mobile/app/auth/presentation/forgot_password/pages/forgot_password_page.dart';
+import 'package:chat_mobile/app/auth/presentation/login/pages/login_page.dart';
+import 'package:chat_mobile/app/auth/presentation/otp/pages/otp_page.dart';
+import 'package:chat_mobile/app/auth/presentation/signup/pages/signup_page.dart';
+import 'package:chat_mobile/app/chat/presentation/pages/chat_page.dart';
+import 'package:chat_mobile/app/chat/presentation/pages/chats_page.dart';
+import 'package:chat_mobile/app/chat/presentation/pages/users_page.dart';
 import 'package:chat_mobile/routers/app_router.gr.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:chat_mobile/routers/app_paths.dart';

@@ -1,4 +1,4 @@
-import 'package:chat_mobile/utils/errors/field_errors_model.dart';
+import 'package:chat_mobile/core/models/field_errors_model.dart';
 
 abstract class Failure {}
 
