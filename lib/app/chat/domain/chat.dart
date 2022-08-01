@@ -1,15 +1,17 @@
 import 'package:chat_mobile/app/chat/domain/latest_message.dart';
 
-class ChatsResponse {
+class Chat {
   String chatId;
+  String userId;
   bool receiverApprove;
   String username;
   String? userImage;
   int countNewMessages;
   LatestMessage? message;
 
-  ChatsResponse({
+  Chat({
     required this.chatId,
+    required this.userId,
     required this.receiverApprove,
     required this.username,
     this.userImage,
@@ -17,16 +19,18 @@ class ChatsResponse {
     this.message,
   });
 
-  ChatsResponse copyWith({
+  Chat copyWith({
     String? chatId,
+    String? userId,
     bool? receiverApprove,
     String? username,
     String? userImage,
     int? countNewMessages,
     LatestMessage? message,
   }) {
-    return ChatsResponse(
+    return Chat(
       chatId: chatId ?? this.chatId,
+      userId: userId ?? this.userId,
       receiverApprove: receiverApprove ?? this.receiverApprove,
       username: username ?? this.username,
       userImage: userImage ?? this.userImage,
@@ -46,9 +50,10 @@ class ChatsResponse {
     };
   }
 
-  factory ChatsResponse.fromMap(Map<String, dynamic> map) {
-    return ChatsResponse(
+  factory Chat.fromMap(Map<String, dynamic> map) {
+    return Chat(
       chatId: map['chatId'] as String,
+      userId: map['userId'] as String,
       receiverApprove: map['receiverApprove'] as bool,
       username: map['username'] as String,
       userImage: map['userImage'] != null ? map['userImage'] as String : null,
@@ -61,14 +66,15 @@ class ChatsResponse {
 
   @override
   String toString() {
-    return 'ChatsResponse(chatId: $chatId, receiverApprove: $receiverApprove, username: $username, userImage: $userImage, countNewMessages: $countNewMessages, message: $message)';
+    return 'ChatsResponse(chatId: $chatId, userId: $userId, receiverApprove: $receiverApprove, username: $username, userImage: $userImage, countNewMessages: $countNewMessages, message: $message)';
   }
 
   @override
-  bool operator ==(covariant ChatsResponse other) {
+  bool operator ==(covariant Chat other) {
     if (identical(this, other)) return true;
 
     return other.chatId == chatId &&
+        other.userId == userId &&
         other.receiverApprove == receiverApprove &&
         other.username == username &&
         other.userImage == userImage &&
@@ -79,6 +85,7 @@ class ChatsResponse {
   @override
   int get hashCode {
     return chatId.hashCode ^
+        userId.hashCode ^
         receiverApprove.hashCode ^
         username.hashCode ^
         userImage.hashCode ^

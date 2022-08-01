@@ -1,7 +1,7 @@
 import 'package:chat_mobile/app/chat/domain/conversation_message.dart';
 import 'package:flutter/foundation.dart';
 
-class ConversationResponse {
+class Conversation {
   String chatId;
   String username;
   String userId;
@@ -9,7 +9,7 @@ class ConversationResponse {
   bool receiverApprove;
   List<ConversationMessage> messages;
 
-  ConversationResponse({
+  Conversation({
     required this.chatId,
     required this.username,
     required this.userId,
@@ -18,7 +18,7 @@ class ConversationResponse {
     required this.messages,
   });
 
-  ConversationResponse copyWith({
+  Conversation copyWith({
     String? chatId,
     String? username,
     String? userId,
@@ -26,7 +26,7 @@ class ConversationResponse {
     bool? receiverApprove,
     List<ConversationMessage>? messages,
   }) {
-    return ConversationResponse(
+    return Conversation(
       chatId: chatId ?? this.chatId,
       username: username ?? this.username,
       userId: userId ?? this.userId,
@@ -47,8 +47,8 @@ class ConversationResponse {
     };
   }
 
-  factory ConversationResponse.fromMap(Map<String, dynamic> map) {
-    return ConversationResponse(
+  factory Conversation.fromMap(Map<String, dynamic> map) {
+    return Conversation(
       chatId: map['chatId'] as String,
       username: map['username'] as String,
       userId: map['userId'] as String,
@@ -68,7 +68,7 @@ class ConversationResponse {
   }
 
   @override
-  bool operator ==(covariant ConversationResponse other) {
+  bool operator ==(covariant Conversation other) {
     if (identical(this, other)) return true;
 
     return other.chatId == chatId &&
