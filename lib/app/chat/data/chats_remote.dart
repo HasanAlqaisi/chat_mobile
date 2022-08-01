@@ -1,5 +1,5 @@
-import 'package:chat_mobile/app/chat/domain/chats_response.dart';
-import 'package:chat_mobile/app/chat/domain/conversation_response.dart';
+import 'package:chat_mobile/app/chat/domain/chat.dart';
+import 'package:chat_mobile/app/chat/domain/conversation.dart';
 import 'package:chat_mobile/core/network/dio_client.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,22 +23,22 @@ class ChatsRemote {
     );
   }
 
-  Future<List<ChatsResponse>> getChats(String userId) async {
+  Future<List<Chat>> getChats(String userId) async {
     final res = await dioClient.dio.get('/chats/user/$userId',
         options: Options(headers: {'requireToken': true}));
 
     return (res.data as List)
         .map(
-          (chat) => ChatsResponse.fromMap(chat as Map<String, dynamic>),
+          (chat) => Chat.fromMap(chat as Map<String, dynamic>),
         )
         .toList();
   }
 
-  Future<ConversationResponse> getChat(String chatId) async {
+  Future<Conversation> getChat(String chatId) async {
     final res = await dioClient.dio.get('/chats/$chatId/messages',
         options: Options(headers: {'requireToken': true}));
 
-    return ConversationResponse.fromMap(res.data as Map<String, dynamic>);
+    return Conversation.fromMap(res.data as Map<String, dynamic>);
   }
 
   Future<void> deleteChat(String chatId) async {

@@ -1,8 +1,8 @@
 import 'package:chat_mobile/app/chat/data/chats_repo.dart';
-import 'package:chat_mobile/app/chat/domain/chats_response.dart';
+import 'package:chat_mobile/app/chat/domain/chat.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ChatsController extends StateNotifier<AsyncValue<List<ChatsResponse>>> {
+class ChatsController extends StateNotifier<AsyncValue<List<Chat>>> {
   final ChatsRepo chatsRepo;
 
   ChatsController({required this.chatsRepo}) : super(const AsyncData([]));
@@ -35,7 +35,7 @@ class ChatsController extends StateNotifier<AsyncValue<List<ChatsResponse>>> {
 }
 
 final chatsControllerProvider = StateNotifierProvider.autoDispose<
-    ChatsController, AsyncValue<List<ChatsResponse>>>((ref) {
+    ChatsController, AsyncValue<List<Chat>>>((ref) {
   final chatsRepo = ref.watch(chatsRepoProvider);
 
   return ChatsController(chatsRepo: chatsRepo);

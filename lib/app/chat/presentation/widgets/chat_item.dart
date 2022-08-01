@@ -1,4 +1,4 @@
-import 'package:chat_mobile/app/chat/domain/chats_response.dart';
+import 'package:chat_mobile/app/chat/domain/chat.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -8,7 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ChatItem extends StatelessWidget {
-  final ChatsResponse data;
+  final Chat data;
 
   const ChatItem({
     Key? key,

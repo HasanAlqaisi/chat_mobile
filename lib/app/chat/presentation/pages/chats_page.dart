@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:chat_mobile/app/chat/domain/chats_response.dart';
+import 'package:chat_mobile/app/chat/domain/chat.dart';
 import 'package:chat_mobile/app/chat/presentation/providers/chats_controller.dart';
+import 'package:chat_mobile/app/chat/presentation/providers/providers.dart';
 import 'package:chat_mobile/app/chat/presentation/widgets/chat_item.dart';
 import 'package:chat_mobile/app/chat/presentation/widgets/grey_textfield.dart';
 import 'package:chat_mobile/routers/app_paths.dart';
@@ -20,79 +21,89 @@ class ChatsPage extends ConsumerStatefulWidget {
 }
 
 class ChatsPageState extends ConsumerState<ChatsPage> {
+  String? currentUserId;
+
   @override
   Widget build(BuildContext context) {
     ref.listen<AsyncValue<String>>(uidProvider, (_, state) {
       state.whenOrNull(
-        error: (e, _) => mapExceptionToFailure(e).showSnackBar(context),
-        data: (uid) =>
-            ref.watch(chatsControllerProvider.notifier).fetchChats(uid),
-      );
+          error: (e, _) => mapExceptionToFailure(e).showSnackBar(context),
+          data: (uid) {
+            currentUserId = uid;
+            ref
+                .watch(chatsControllerProvider.notifier)
+                .fetchChats(currentUserId!);
+          });
     });
 
-    ref.listen<AsyncValue<List<ChatsResponse>>>(chatsControllerProvider,
-        (_, state) {
+    ref.listen<AsyncValue<List<Chat>>>(chatsControllerProvider, (_, state) {
       state.whenOrNull(
         error: (e, _) => mapExceptionToFailure(e).showSnackBar(context),
       );
     });
 
-    final chatsState = ref.watch(chatsControllerProvider);
+    // final chatsState = ref.watch(chatsControllerProvider);
 
-    final chats = chatsState.asData?.value;
+    // final chats = chatsState.asData?.value;
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        actions: [
-          Padding(
-            padding: EdgeInsets.all(16.0.r),
-            child: GestureDetector(
-              onTap: () => AutoRouter.of(context).pushNamed(AppPaths.users),
-              child: const Icon(Icons.add, color: Colors.black),
-            ),
-          )
-        ],
-        title: Text('Chats',
-            style: GoogleFonts.mulish(
-              color: Colors.black,
-              fontSize: 18.sp,
-              fontWeight: FontWeight.w500,
-            )),
+    final chats = ref.watch(chatsStreamProvider(''));
+
+    return chats.when(
+      data: (chats) => Scaffold(
         backgroundColor: Colors.white,
-        elevation: 0.0,
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.0.h, vertical: 14.h),
-          child: Column(
-            children: [
-              GreyTextField(
-                  hint: 'serach',
-                  icon: Icon(
-                    Icons.search,
-                    color: const Color(0xFFADB5BD),
-                    size: 16.r,
-                  )),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: chats?.length ?? 0,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16.0.h),
-                      child: GestureDetector(
-                        onTap: () => AutoRouter.of(context)
-                            .pushNamed('/${chats![index].chatId}'),
-                        child: ChatItem(data: chats![index]),
-                      ),
-                    );
-                  },
-                ),
+        appBar: AppBar(
+          actions: [
+            Padding(
+              padding: EdgeInsets.all(16.0.r),
+              child: GestureDetector(
+                onTap: () => AutoRouter.of(context).pushNamed(AppPaths.users),
+                child: const Icon(Icons.add, color: Colors.black),
               ),
-            ],
+            )
+          ],
+          title: Text('Chats',
+              style: GoogleFonts.mulish(
+                color: Colors.black,
+                fontSize: 18.sp,
+                fontWeight: FontWeight.w500,
+              )),
+          backgroundColor: Colors.white,
+          elevation: 0.0,
+        ),
+        body: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24.0.h, vertical: 14.h),
+            child: Column(
+              children: [
+                GreyTextField(
+                    hint: 'serach',
+                    icon: Icon(
+                      Icons.search,
+                      color: const Color(0xFFADB5BD),
+                      size: 16.r,
+                    )),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: chats.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16.0.h),
+                        child: GestureDetector(
+                          onTap: () => AutoRouter.of(context)
+                              .pushNamed('/${chats[index].chatId}'),
+                          child: ChatItem(data: chats[index]),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (e, _) => Center(child: Text('Could not fetch data $e')),
     );
   }
 }

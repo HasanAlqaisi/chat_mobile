@@ -1,9 +1,9 @@
 import 'package:chat_mobile/app/chat/data/chats_repo.dart';
 import 'package:chat_mobile/app/chat/data/messages_repo.dart';
-import 'package:chat_mobile/app/chat/domain/conversation_response.dart';
+import 'package:chat_mobile/app/chat/domain/conversation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ChatController extends StateNotifier<AsyncValue<ConversationResponse?>> {
+class ChatController extends StateNotifier<AsyncValue<Conversation?>> {
   final ChatsRepo chatsRepo;
   final MessagesRepo messagesRepo;
 
@@ -61,7 +61,7 @@ class ChatController extends StateNotifier<AsyncValue<ConversationResponse?>> {
 }
 
 final chatControllerProvider = StateNotifierProvider.autoDispose<ChatController,
-    AsyncValue<ConversationResponse?>>((ref) {
+    AsyncValue<Conversation?>>((ref) {
   final chatsRepo = ref.watch(chatsRepoProvider);
   final messagesRepo = ref.watch(messagesRepoProvider);
 

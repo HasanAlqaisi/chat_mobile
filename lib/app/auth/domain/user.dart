@@ -7,7 +7,7 @@ class User {
   final String? lastName;
   final String phoneNumber;
   final String? profileImage;
-  final String lastVisibleDate;
+  final DateTime lastVisibleDate;
 
   User({
     required this.id,
@@ -26,7 +26,7 @@ class User {
     String? lastName,
     String? phoneNumber,
     String? profileImage,
-    String? lastVisibleDate,
+    DateTime? lastVisibleDate,
   }) {
     return User(
       id: id ?? this.id,
@@ -60,7 +60,7 @@ class User {
       phoneNumber: map['phoneNumber'] as String,
       profileImage:
           map['profileImage'] != null ? map['profileImage'] as String : null,
-      lastVisibleDate: map['lastVisibleDate'] as String,
+      lastVisibleDate: DateTime.parse(map['lastVisibleDate']),
     );
   }
 

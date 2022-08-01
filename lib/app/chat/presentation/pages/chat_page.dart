@@ -1,5 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:chat_mobile/app/chat/domain/conversation_response.dart';
+import 'package:chat_mobile/app/chat/domain/conversation.dart';
 import 'package:chat_mobile/app/chat/presentation/providers/chat_controller.dart';
 import 'package:chat_mobile/app/chat/presentation/providers/providers.dart';
 import 'package:chat_mobile/app/chat/presentation/widgets/chat_bubble.dart';
@@ -38,7 +38,7 @@ class ChatPageState extends ConsumerState<ChatPage> {
           data: (value) => currentUserId = value,
         );
 
-    ref.listen<AsyncValue<ConversationResponse?>>(chatControllerProvider,
+    ref.listen<AsyncValue<Conversation?>>(chatControllerProvider,
         (_, state) {
       state.whenOrNull(
         error: (e, _) => mapExceptionToFailure(e).showSnackBar(context),
@@ -68,7 +68,7 @@ class ChatPageState extends ConsumerState<ChatPage> {
   }
 
   Widget temp(
-      ConversationResponse? chat, TextEditingController contentController) {
+      Conversation? chat, TextEditingController contentController) {
     final currentIsSenderAndreceiverNoApprove =
         chat != null && chat.isRequesterSender && !chat.receiverApprove;
 
