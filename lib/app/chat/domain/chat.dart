@@ -7,7 +7,7 @@ class Chat {
   String username;
   String? userImage;
   int countNewMessages;
-  LatestMessage? message;
+  LatestMessage? latestMessage;
 
   Chat({
     required this.chatId,
@@ -16,7 +16,7 @@ class Chat {
     required this.username,
     this.userImage,
     required this.countNewMessages,
-    this.message,
+    this.latestMessage,
   });
 
   Chat copyWith({
@@ -35,7 +35,7 @@ class Chat {
       username: username ?? this.username,
       userImage: userImage ?? this.userImage,
       countNewMessages: countNewMessages ?? this.countNewMessages,
-      message: message ?? this.message,
+      latestMessage: message ?? this.latestMessage,
     );
   }
 
@@ -46,7 +46,7 @@ class Chat {
       'username': username,
       'userImage': userImage,
       'countNewMessages': countNewMessages,
-      'message': message?.toMap(),
+      'message': latestMessage?.toMap(),
     };
   }
 
@@ -58,7 +58,7 @@ class Chat {
       username: map['username'] as String,
       userImage: map['userImage'] != null ? map['userImage'] as String : null,
       countNewMessages: map['countNewMessages'] as int,
-      message: map['message'] != null
+      latestMessage: map['message'] != null
           ? LatestMessage.fromMap(map['message'] as Map<String, dynamic>)
           : null,
     );
@@ -66,7 +66,7 @@ class Chat {
 
   @override
   String toString() {
-    return 'ChatsResponse(chatId: $chatId, userId: $userId, receiverApprove: $receiverApprove, username: $username, userImage: $userImage, countNewMessages: $countNewMessages, message: $message)';
+    return 'ChatsResponse(chatId: $chatId, userId: $userId, receiverApprove: $receiverApprove, username: $username, userImage: $userImage, countNewMessages: $countNewMessages, message: $latestMessage)';
   }
 
   @override
@@ -79,7 +79,7 @@ class Chat {
         other.username == username &&
         other.userImage == userImage &&
         other.countNewMessages == countNewMessages &&
-        other.message == message;
+        other.latestMessage == latestMessage;
   }
 
   @override
@@ -90,6 +90,6 @@ class Chat {
         username.hashCode ^
         userImage.hashCode ^
         countNewMessages.hashCode ^
-        message.hashCode;
+        latestMessage.hashCode;
   }
 }

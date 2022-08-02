@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:chat_mobile/app/chat/domain/conversation.dart';
 import 'package:chat_mobile/app/chat/presentation/providers/chat_controller.dart';
@@ -38,15 +40,14 @@ class ChatPageState extends ConsumerState<ChatPage> {
           data: (value) => currentUserId = value,
         );
 
-    ref.listen<AsyncValue<Conversation?>>(chatControllerProvider,
-        (_, state) {
+    ref.listen<AsyncValue<Conversation?>>(chatControllerProvider, (_, state) {
       state.whenOrNull(
         error: (e, _) => mapExceptionToFailure(e).showSnackBar(context),
       );
     });
 
-    final chatState = ref.watch(chatControllerProvider);
-    final chat = chatState.asData?.value;
+    final chatAsync = ref.watch(conversationStreamProvider(widget.chatId));
+    final chat = chatAsync.asData?.value;
 
     final contentController = ref.watch(contentControllerProvider);
 
@@ -67,8 +68,7 @@ class ChatPageState extends ConsumerState<ChatPage> {
     );
   }
 
-  Widget temp(
-      Conversation? chat, TextEditingController contentController) {
+  Widget temp(Conversation? chat, TextEditingController contentController) {
     final currentIsSenderAndreceiverNoApprove =
         chat != null && chat.isRequesterSender && !chat.receiverApprove;
 

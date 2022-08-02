@@ -9,12 +9,12 @@ class UserController extends StateNotifier<AsyncValue<List<User>>> {
     required this.authRepo,
   }) : super(const AsyncData([]));
 
-  Future<void> searchUsers(String? query) async {
+  Future<void> searchUsers(String? query, String? currentUserId) async {
     state = const AsyncLoading();
 
     final searchUsers = authRepo.searchUsers;
 
-    state = await AsyncValue.guard(() => searchUsers(query));
+    state = await AsyncValue.guard(() => searchUsers(query, currentUserId));
   }
 
   // Stream<List<User>> watchUsers(String? query) async {

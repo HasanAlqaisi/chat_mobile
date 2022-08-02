@@ -2,6 +2,7 @@ import 'package:chat_mobile/app/auth/data/auth_repo.dart';
 import 'package:chat_mobile/app/auth/domain/user.dart';
 import 'package:chat_mobile/app/chat/data/chats_repo.dart';
 import 'package:chat_mobile/app/chat/domain/chat.dart';
+import 'package:chat_mobile/app/chat/domain/conversation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -20,4 +21,11 @@ final chatsStreamProvider =
   final chatsRepo = ref.watch(chatsRepoProvider);
 
   return chatsRepo.watchChats(currentUserId);
+});
+
+final conversationStreamProvider =
+    StreamProvider.family<Conversation?, String?>((ref, chatId) {
+  final chatsRepo = ref.watch(chatsRepoProvider);
+
+  return chatsRepo.watchConversations(chatId);
 });

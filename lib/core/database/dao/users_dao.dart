@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:chat_mobile/app/auth/domain/user.dart';
 import 'package:chat_mobile/core/database/database.dart';
 import 'package:chat_mobile/core/database/tables.dart';
@@ -11,12 +13,15 @@ class UsersDao extends DatabaseAccessor<AppDatabase> with _$UsersDaoMixin {
   UsersDao(AppDatabase db) : super(db);
 
   Future<void> upsertUsers(
-    // String currentUserId,
     List<UsersCompanion> usersList,
+    String? currentUserId,
   ) async {
+    // delete(users).go();
+    // delete(users).where((row) => row.id.equals(currentUserId).not());
     await batch((batch) {
       // TODO: should not delete current user id
-      batch.deleteWhere(users, (row) => const Constant(true));
+      batch.deleteWhere<$UsersTable, User>(
+          users, (row) => row.id.equals(currentUserId).not());
       batch.insertAllOnConflictUpdate(users, usersList);
     });
   }

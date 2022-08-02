@@ -1,6 +1,3 @@
-import 'dart:developer';
-
-import 'package:chat_mobile/app/auth/domain/user.dart';
 import 'package:chat_mobile/app/chat/domain/chat.dart';
 import 'package:chat_mobile/core/database/database.dart';
 import 'package:chat_mobile/core/database/tables.dart';
@@ -21,7 +18,6 @@ class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
   }
 
   Stream<List<Chat>> watchChats(String? currentUserId) {
-    log(currentUserId.toString());
     return (select(chats)..where((chat) => chat.userId.equals(currentUserId)))
         .watch();
   }

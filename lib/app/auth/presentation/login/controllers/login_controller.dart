@@ -19,8 +19,8 @@ class LoginController extends StateNotifier<AsyncValue<LoginInfo?>> {
 final loginControllerProvider =
     StateNotifierProvider.autoDispose<LoginController, AsyncValue<LoginInfo?>>(
   (ref) {
-    final loginRepo = ref.watch(authRepoProvider);
+    final authRepo = ref.watch(authRepoProvider);
 
-    return LoginController(loginRepo);
+    return LoginController(authRepo);
   },
 );

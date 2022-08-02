@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:chat_mobile/app/chat/domain/chat.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -47,16 +49,16 @@ class ChatItem extends StatelessWidget {
                     fontSize: 16.sp, fontWeight: FontWeight.w500),
               ),
               Text(
-                data.message?.content ?? 'No messages',
+                data.latestMessage?.content ?? 'No messages',
                 style: GoogleFonts.mulish(
                     fontSize: 14.sp, color: const Color(0xFFADB5BD)),
               ),
             ],
           ),
           const Spacer(),
-          data.message?.date != null
+          data.latestMessage?.date != null
               ? Text(
-                  timeago.format(DateTime.parse(data.message!.date),
+                  timeago.format(DateTime.parse(data.latestMessage!.date),
                       locale: 'en_short'),
                   style: GoogleFonts.mulish(
                       fontSize: 12.sp, fontWeight: FontWeight.w600),

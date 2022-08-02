@@ -4,14 +4,15 @@ import 'package:chat_mobile/app/chat/domain/conversation_message.dart';
 import 'package:chat_mobile/app/chat/domain/latest_message.dart';
 import 'package:drift/drift.dart';
 
-class LatestMessageConverter extends TypeConverter<LatestMessage, String>
-    with JsonTypeConverter<LatestMessage, String> {
+class LatestMessageConverter extends TypeConverter<LatestMessage?, String>
+    with JsonTypeConverter<LatestMessage?, String> {
   @override
   LatestMessage? mapToDart(String? fromDb) {
     if (fromDb == null) {
       return null;
     }
-    return LatestMessage.fromJson(fromDb);
+
+    return LatestMessage.fromJson(json.decode(fromDb));
   }
 
   @override
@@ -35,9 +36,7 @@ class ConversationMessageConverter
 
     final jsonData = json.decode(fromDb);
 
-    final data = jsonData['body'] as List<String>;
-
-    for (final string in data) {
+    for (final string in jsonData) {
       final message = ConversationMessage.fromJson(string);
       messages.add(message);
     }

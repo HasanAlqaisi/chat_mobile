@@ -95,7 +95,7 @@ class AuthRepo {
     }
   }
 
-  Future<List<User>> searchUsers(String? query) async {
+  Future<List<User>> searchUsers(String? query, String? currentUserId) async {
     try {
       final result = await authRemote.searchUsers(query);
 
@@ -110,7 +110,7 @@ class AuthRepo {
               lastVisibleDate: user.lastVisibleDate))
           .toList();
 
-      await authLocal.upsertUsers(insertableUsers);
+      await authLocal.upsertUsers(insertableUsers, currentUserId);
 
       return result;
     } catch (e) {

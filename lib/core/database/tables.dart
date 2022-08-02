@@ -21,7 +21,8 @@ class Users extends Table {
 @UseRowClass(Chat)
 class Chats extends Table {
   TextColumn get chatId => text()();
-  TextColumn get userId => text().references(Users, #id)();
+  TextColumn get userId =>
+      text().references(Users, #id, onDelete: KeyAction.cascade)();
   BoolColumn get receiverApprove => boolean()();
   TextColumn get username => text().unique()();
   TextColumn get userImage => text().nullable()();
@@ -36,7 +37,7 @@ class Chats extends Table {
 @UseRowClass(Conversation)
 class Conversations extends Table {
   TextColumn get chatId => text()();
-  TextColumn get userId => text().references(Users, #id)();
+  TextColumn get userId => text()();
   TextColumn get username => text().unique()();
   BoolColumn get receiverApprove => boolean()();
   BoolColumn get isRequesterSender => boolean()();

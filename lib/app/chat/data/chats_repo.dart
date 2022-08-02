@@ -41,7 +41,7 @@ class ChatsRepo {
                 username: chat.username,
                 userImage: Value(chat.userImage),
                 countNewMessages: chat.countNewMessages,
-                latestMessage: Value(chat.message),
+                latestMessage: Value(chat.latestMessage),
               ))
           .toList();
 
@@ -56,6 +56,17 @@ class ChatsRepo {
   Future<Conversation> getChat(String chatId) async {
     try {
       final chat = await chatsRemote.getChat(chatId);
+
+      final insertableConversation = ConversationsCompanion.insert(
+        chatId: chat.chatId,
+        userId: chat.userId,
+        username: chat.username,
+        receiverApprove: chat.receiverApprove,
+        isRequesterSender: chat.isRequesterSender,
+        messages: chat.messages,
+      );
+
+      await chatsLocal.upsertConversation(insertableConversation);
 
       return chat;
     } catch (_) {
@@ -81,6 +92,9 @@ class ChatsRepo {
 
   Stream<List<Chat>> watchChats(String? currentUserId) =>
       chatsLocal.watchChats(currentUserId);
+
+  Stream<Conversation?> watchConversations(String? chatId) =>
+      chatsLocal.watchConversations(chatId);
 }
 
 final chatsRepoProvider = Provider<ChatsRepo>((ref) {

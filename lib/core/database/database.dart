@@ -5,6 +5,8 @@ import 'package:chat_mobile/app/chat/domain/conversation.dart';
 import 'package:chat_mobile/app/chat/domain/conversation_message.dart';
 import 'package:chat_mobile/app/chat/domain/latest_message.dart';
 import 'package:chat_mobile/core/database/converters.dart';
+import 'package:chat_mobile/core/database/dao/chats_dao.dart';
+import 'package:chat_mobile/core/database/dao/conversations_dao.dart';
 import 'package:chat_mobile/core/database/dao/users_dao.dart';
 import 'package:chat_mobile/core/database/tables.dart';
 import 'package:drift/drift.dart';
@@ -15,7 +17,10 @@ import 'package:path/path.dart' as p;
 
 part 'database.g.dart';
 
-@DriftDatabase(tables: [Users, Chats, Conversations], daos: [UsersDao])
+@DriftDatabase(
+  tables: [Users, Chats, Conversations],
+  daos: [UsersDao, ChatsDao, ConversationsDao],
+)
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
