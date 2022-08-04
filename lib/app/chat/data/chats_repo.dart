@@ -29,9 +29,9 @@ class ChatsRepo {
     }
   }
 
-  Future<List<Chat>> getChats(String uid) async {
+  Future<List<Chat>> getChats(String uid, String? query) async {
     try {
-      final chats = await chatsRemote.getChats(uid);
+      final chats = await chatsRemote.getChats(uid, query);
 
       final insertableChats = chats
           .map((chat) => ChatsCompanion.insert(

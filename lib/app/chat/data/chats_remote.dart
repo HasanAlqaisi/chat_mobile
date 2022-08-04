@@ -23,9 +23,12 @@ class ChatsRemote {
     );
   }
 
-  Future<List<Chat>> getChats(String userId) async {
-    final res = await dioClient.dio.get('/chats/user/$userId',
-        options: Options(headers: {'requireToken': true}));
+  Future<List<Chat>> getChats(String userId, String? query) async {
+    final res = await dioClient.dio.get(
+      '/chats/user/$userId',
+      options: Options(headers: {'requireToken': true}),
+      queryParameters: {'username': query},
+    );
 
     return (res.data as List)
         .map(

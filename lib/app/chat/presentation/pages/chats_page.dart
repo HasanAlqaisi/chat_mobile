@@ -39,7 +39,7 @@ class ChatsPageState extends ConsumerState<ChatsPage> {
             currentUserId = uid;
             ref
                 .watch(chatsControllerProvider.notifier)
-                .fetchChats(currentUserId!);
+                .fetchChats(currentUserId!, '');
           });
     });
 
@@ -89,6 +89,9 @@ class ChatsPageState extends ConsumerState<ChatsPage> {
             children: [
               GreyTextField(
                   hint: 'serach',
+                  onChanged: (value) => ref
+                      .read(chatsControllerProvider.notifier)
+                      .fetchChats(currentUserId!, value),
                   icon: Icon(
                     Icons.search,
                     color: const Color(0xFFADB5BD),

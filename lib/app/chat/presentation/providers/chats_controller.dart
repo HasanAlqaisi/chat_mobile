@@ -7,12 +7,12 @@ class ChatsController extends StateNotifier<AsyncValue<List<Chat>>> {
 
   ChatsController({required this.chatsRepo}) : super(const AsyncData([]));
 
-  Future<void> fetchChats(String uid) async {
+  Future<void> fetchChats(String uid, String? query) async {
     state = const AsyncLoading();
 
     final getChats = chatsRepo.getChats;
 
-    state = await AsyncValue.guard(() => getChats(uid));
+    state = await AsyncValue.guard(() => getChats(uid, query));
   }
 
   Future<void> createChat(
@@ -30,7 +30,7 @@ class ChatsController extends StateNotifier<AsyncValue<List<Chat>>> {
       return;
     }
 
-    await fetchChats(senderId);
+    await fetchChats(senderId, '');
   }
 }
 
