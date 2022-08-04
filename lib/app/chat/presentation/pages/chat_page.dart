@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:chat_mobile/app/chat/domain/conversation.dart';
 import 'package:chat_mobile/app/chat/presentation/providers/chat_controller.dart';
+import 'package:chat_mobile/app/chat/presentation/providers/chats_controller.dart';
 import 'package:chat_mobile/app/chat/presentation/providers/providers.dart';
 import 'package:chat_mobile/app/chat/presentation/widgets/chat_bubble.dart';
 import 'package:chat_mobile/app/chat/presentation/widgets/grey_textfield.dart';
@@ -51,8 +52,10 @@ class ChatPageState extends ConsumerState<ChatPage> {
   Widget build(BuildContext context) {
     ref.listen<AsyncValue<Conversation?>>(chatControllerProvider, (_, state) {
       state.whenOrNull(
-        error: (e, _) => mapExceptionToFailure(e).showSnackBar(context),
-      );
+          error: (e, _) => mapExceptionToFailure(e).showSnackBar(context),
+          data: (_) => ref
+              .read(chatsControllerProvider.notifier)
+              .fetchChats(widget.currentUserId, ''));
     });
 
     final chatAsync = ref.watch(conversationStreamProvider(widget.chatId));
