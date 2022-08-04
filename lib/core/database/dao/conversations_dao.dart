@@ -1,4 +1,3 @@
-import 'package:chat_mobile/app/chat/domain/chat.dart';
 import 'package:chat_mobile/app/chat/domain/conversation.dart';
 import 'package:chat_mobile/core/database/database.dart';
 import 'package:chat_mobile/core/database/tables.dart';

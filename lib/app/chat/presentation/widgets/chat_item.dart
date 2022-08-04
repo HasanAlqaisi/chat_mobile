@@ -1,8 +1,5 @@
-import 'dart:developer';
-
 import 'package:chat_mobile/app/chat/domain/chat.dart';
 import 'package:timeago/timeago.dart' as timeago;
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_mobile/utils/constants/assets_path.dart';
 import 'package:flutter/material.dart';

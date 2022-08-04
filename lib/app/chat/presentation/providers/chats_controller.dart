@@ -1,6 +1,5 @@
 import 'package:chat_mobile/app/chat/data/chats_repo.dart';
 import 'package:chat_mobile/app/chat/domain/chat.dart';
-import 'package:chat_mobile/app/chat/presentation/providers/chat_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ChatsController extends StateNotifier<AsyncValue<List<Chat>>> {

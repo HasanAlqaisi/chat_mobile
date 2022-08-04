@@ -60,10 +60,15 @@ class AppRouter extends _i8.RootStackRouter {
     ChatRoute.name: (routeData) {
       final pathParams = routeData.inheritedPathParams;
       final args = routeData.argsAs<ChatRouteArgs>(
-          orElse: () => ChatRouteArgs(chatId: pathParams.getString('id')));
+          orElse: () => ChatRouteArgs(
+              chatId: pathParams.getString('id'),
+              currentUserId: pathParams.getString('userId')));
       return _i8.MaterialPageX<dynamic>(
           routeData: routeData,
-          child: _i7.ChatPage(key: args.key, chatId: args.chatId));
+          child: _i7.ChatPage(
+              key: args.key,
+              chatId: args.chatId,
+              currentUserId: args.currentUserId));
     }
   };
 
@@ -75,7 +80,8 @@ class AppRouter extends _i8.RootStackRouter {
         _i8.RouteConfig(ForgotPasswordRoute.name, path: '/forgot-pass'),
         _i8.RouteConfig(ChatsRoute.name, path: '/', guards: [authGuard]),
         _i8.RouteConfig(UsersRoute.name, path: '/users', guards: [authGuard]),
-        _i8.RouteConfig(ChatRoute.name, path: '/:id', guards: [authGuard])
+        _i8.RouteConfig(ChatRoute.name,
+            path: '/:id/:userId', guards: [authGuard])
       ];
 }
 
@@ -131,24 +137,29 @@ class UsersRoute extends _i8.PageRouteInfo<void> {
 /// generated route for
 /// [_i7.ChatPage]
 class ChatRoute extends _i8.PageRouteInfo<ChatRouteArgs> {
-  ChatRoute({_i9.Key? key, required String chatId})
+  ChatRoute(
+      {_i9.Key? key, required String chatId, required String currentUserId})
       : super(ChatRoute.name,
-            path: '/:id',
-            args: ChatRouteArgs(key: key, chatId: chatId),
-            rawPathParams: {'id': chatId});
+            path: '/:id/:userId',
+            args: ChatRouteArgs(
+                key: key, chatId: chatId, currentUserId: currentUserId),
+            rawPathParams: {'id': chatId, 'userId': currentUserId});
 
   static const String name = 'ChatRoute';
 }
 
 class ChatRouteArgs {
-  const ChatRouteArgs({this.key, required this.chatId});
+  const ChatRouteArgs(
+      {this.key, required this.chatId, required this.currentUserId});
 
   final _i9.Key? key;
 
   final String chatId;
 
+  final String currentUserId;
+
   @override
   String toString() {
-    return 'ChatRouteArgs{key: $key, chatId: $chatId}';
+    return 'ChatRouteArgs{key: $key, chatId: $chatId, currentUserId: $currentUserId}';
   }
 }

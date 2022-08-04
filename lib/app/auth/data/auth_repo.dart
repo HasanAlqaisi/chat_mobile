@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:chat_mobile/app/auth/data/auth_local.dart';
 import 'package:chat_mobile/app/auth/data/auth_remote.dart';
 import 'package:chat_mobile/app/auth/domain/login_info.dart';
@@ -8,7 +6,6 @@ import 'package:chat_mobile/core/database/database.dart';
 import 'package:chat_mobile/utils/constants/secrets.dart';
 import 'package:chat_mobile/utils/errors/exceptions.dart';
 import 'package:chat_mobile/core/services/secure_storage.dart';
-import 'package:chat_mobile/utils/extensions/jwt_extension.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

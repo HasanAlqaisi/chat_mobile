@@ -1,12 +1,10 @@
-import 'dart:developer';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:chat_mobile/app/chat/domain/conversation.dart';
 import 'package:chat_mobile/app/chat/presentation/providers/chat_controller.dart';
 import 'package:chat_mobile/app/chat/presentation/providers/providers.dart';
 import 'package:chat_mobile/app/chat/presentation/widgets/chat_bubble.dart';
 import 'package:chat_mobile/app/chat/presentation/widgets/grey_textfield.dart';
-import 'package:chat_mobile/core/providers.dart';
+import 'package:chat_mobile/core/services/socket.dart';
 import 'package:chat_mobile/utils/errors/map_exception_to_failure.dart';
 import 'package:chat_mobile/utils/extensions/failure_extension.dart';
 import 'package:flutter/material.dart';
@@ -16,8 +14,12 @@ import 'package:google_fonts/google_fonts.dart';
 
 class ChatPage extends ConsumerStatefulWidget {
   final String chatId;
+  final String currentUserId;
 
-  const ChatPage({Key? key, @PathParam('id') required this.chatId})
+  const ChatPage(
+      {Key? key,
+      @PathParam('id') required this.chatId,
+      @PathParam('userId') required this.currentUserId})
       : super(key: key);
 
   @override
@@ -25,21 +27,28 @@ class ChatPage extends ConsumerStatefulWidget {
 }
 
 class ChatPageState extends ConsumerState<ChatPage> {
-  String? currentUserId;
+  late ChatSocket chatSocket;
 
   @override
   void initState() {
     super.initState();
+
     ref.read(chatControllerProvider.notifier).fetchChat(widget.chatId);
+
+    chatSocket = ref.read(chatSocketProvider);
+
+    chatSocket.onConnect();
+
+    chatSocket.emitOnChat(widget.currentUserId);
+
+    chatSocket.onMessage(
+      currentUserId: widget.currentUserId,
+      chatId: widget.chatId,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    ref.watch(uidProvider).whenOrNull(
-          error: (e, _) => mapExceptionToFailure(e).showSnackBar(context),
-          data: (value) => currentUserId = value,
-        );
-
     ref.listen<AsyncValue<Conversation?>>(chatControllerProvider, (_, state) {
       state.whenOrNull(
         error: (e, _) => mapExceptionToFailure(e).showSnackBar(context),
@@ -64,11 +73,15 @@ class ChatPageState extends ConsumerState<ChatPage> {
         backgroundColor: Colors.white,
         elevation: 0.0,
       ),
-      body: temp(chat, contentController),
+      body: temp(chat, contentController, chatSocket),
     );
   }
 
-  Widget temp(Conversation? chat, TextEditingController contentController) {
+  Widget temp(
+    Conversation? chat,
+    TextEditingController contentController,
+    ChatSocket socket,
+  ) {
     final currentIsSenderAndreceiverNoApprove =
         chat != null && chat.isRequesterSender && !chat.receiverApprove;
 
@@ -116,7 +129,8 @@ class ChatPageState extends ConsumerState<ChatPage> {
 
                 return ChatBubble(
                   message: reversedMessages?[index],
-                  isUser: reversedMessages?[index].userId == currentUserId,
+                  isUser:
+                      reversedMessages?[index].userId == widget.currentUserId,
                 );
               }),
               itemCount: chat?.messages.length ?? 0,
@@ -135,12 +149,12 @@ class ChatPageState extends ConsumerState<ChatPage> {
                 ),
                 GestureDetector(
                     onTap: (() {
-                      ref.read(chatControllerProvider.notifier).fetchMessages(
-                            chat!.chatId,
-                            currentUserId!,
-                            null,
-                            contentController.text,
-                          );
+                      socket.emitOnMessage(
+                        currentUserId: widget.currentUserId,
+                        chatId: chat!.chatId,
+                        content: contentController.text,
+                      );
+
                       contentController.clear();
                     }),
                     child: const Icon(

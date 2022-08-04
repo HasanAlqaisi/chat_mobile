@@ -3,7 +3,6 @@ import 'dart:developer' show log;
 import 'package:auto_route/auto_route.dart';
 import 'package:chat_mobile/core/services/secure_storage.dart';
 import 'package:chat_mobile/routers/app_paths.dart';
-import 'package:chat_mobile/core/providers.dart';
 import 'package:chat_mobile/utils/constants/secrets.dart';
 import 'package:chat_mobile/utils/errors/exceptions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

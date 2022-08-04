@@ -35,7 +35,7 @@ class Chat {
       username: username ?? this.username,
       userImage: userImage ?? this.userImage,
       countNewMessages: countNewMessages ?? this.countNewMessages,
-      latestMessage: message ?? this.latestMessage,
+      latestMessage: message ?? latestMessage,
     );
   }
 

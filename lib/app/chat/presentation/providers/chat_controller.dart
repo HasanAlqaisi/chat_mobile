@@ -20,35 +20,6 @@ class ChatController extends StateNotifier<AsyncValue<Conversation?>> {
     state = await AsyncValue.guard(() => getChat(chatId));
   }
 
-  Future<void> _addMessage(
-    String chatId,
-    String uid,
-    String? originalMessageId,
-    String content,
-  ) async {
-    final addMessage = messagesRepo.addMessage;
-
-    await AsyncValue.guard(() => addMessage(
-          chatId,
-          uid,
-          originalMessageId,
-          content,
-        ));
-  }
-
-  Future<void> fetchMessages(
-    String chatId,
-    String uid,
-    String? originalMessageId,
-    String content,
-  ) async {
-    await _addMessage(chatId, uid, originalMessageId, content);
-
-    final getChat = chatsRepo.getChat;
-
-    state = await AsyncValue.guard(() => getChat(chatId));
-  }
-
   Future<void> approveChat(String chatId) async {
     state = const AsyncLoading();
 

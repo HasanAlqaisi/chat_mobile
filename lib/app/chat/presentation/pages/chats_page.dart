@@ -1,8 +1,5 @@
-import 'dart:developer';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:chat_mobile/app/chat/domain/chat.dart';
-import 'package:chat_mobile/app/chat/presentation/providers/chat_controller.dart';
 import 'package:chat_mobile/app/chat/presentation/providers/chats_controller.dart';
 import 'package:chat_mobile/app/chat/presentation/providers/providers.dart';
 import 'package:chat_mobile/app/chat/presentation/widgets/chat_item.dart';
@@ -27,6 +24,11 @@ class ChatsPage extends ConsumerStatefulWidget {
 
 class ChatsPageState extends ConsumerState<ChatsPage> {
   String? currentUserId;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,8 +101,9 @@ class ChatsPageState extends ConsumerState<ChatsPage> {
                     return Padding(
                       padding: EdgeInsets.symmetric(vertical: 16.0.h),
                       child: GestureDetector(
-                        onTap: () => AutoRouter.of(context)
-                            .pushNamed('/${chats![index].chatId}'),
+                        onTap: () => AutoRouter.of(context).pushNamed(
+                          '/${chats![index].chatId}/$currentUserId',
+                        ),
                         child: ChatItem(data: chats![index]),
                       ),
                     );
