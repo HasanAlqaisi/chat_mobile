@@ -58,6 +58,7 @@ dependencies:
   path: ^1.8.1
   drift_db_viewer: ^1.0.3
   socket_io_client: ^2.0.0
+  image_picker: ^0.8.5+3
 
 dev_dependencies:
   flutter_test:
