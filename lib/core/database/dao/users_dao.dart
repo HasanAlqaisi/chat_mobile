@@ -39,6 +39,11 @@ class UsersDao extends DatabaseAccessor<AppDatabase> with _$UsersDaoMixin {
               ))
         .watch();
   }
+
+  Stream<User?> watchUser(String? currentUserId) {
+    return (select(users)..where((user) => user.id.equals(currentUserId)))
+        .watchSingleOrNull();
+  }
 }
 
 final usersDaoProvider = Provider((ref) {

@@ -3,7 +3,7 @@ import 'package:chat_mobile/app/auth/domain/login_info.dart';
 import 'package:chat_mobile/app/auth/presentation/login/controllers/login_controller.dart';
 import 'package:chat_mobile/app/auth/presentation/login/controllers/state_providers.dart';
 import 'package:chat_mobile/core/common_widgets/auth_button.dart';
-import 'package:chat_mobile/core/common_widgets/auth_text_field.dart';
+import 'package:chat_mobile/core/common_widgets/borderd_text_field.dart';
 import 'package:chat_mobile/routers/app_paths.dart';
 import 'package:chat_mobile/routers/app_router.gr.dart';
 import 'package:chat_mobile/utils/constants/app_colors.dart';
@@ -86,7 +86,7 @@ class LoginBodyState extends ConsumerState<LoginBody> {
                 disableLengthCheck: true,
               ),
               SizedBox(height: 11.h),
-              AuthTextField(
+              BorderdTextField(
                 labelText: "Password",
                 contentPadding: EdgeInsets.all(20.0.r),
                 borderRadius: 5,

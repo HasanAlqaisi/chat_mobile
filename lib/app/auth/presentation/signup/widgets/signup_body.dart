@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:chat_mobile/app/auth/presentation/signup/controllers/signup_controller.dart';
 import 'package:chat_mobile/app/auth/presentation/signup/controllers/state_providers.dart';
 import 'package:chat_mobile/core/common_widgets/auth_button.dart';
-import 'package:chat_mobile/core/common_widgets/auth_text_field.dart';
+import 'package:chat_mobile/core/common_widgets/borderd_text_field.dart';
 import 'package:chat_mobile/routers/app_paths.dart';
 import 'package:chat_mobile/utils/constants/app_colors.dart';
 import 'package:chat_mobile/utils/extensions/async_value_extension.dart';
@@ -60,7 +60,7 @@ class SignupBodyState extends ConsumerState<SignupBody> {
                     fontSize: 24.sp, fontWeight: FontWeight.w600),
               ),
               SizedBox(height: 18.h),
-              AuthTextField(
+              BorderdTextField(
                 labelText: "Username",
                 onChanged: (value) => usernameProvider.state = value,
                 errorText: state.showErrorField('username'),
@@ -97,7 +97,7 @@ class SignupBodyState extends ConsumerState<SignupBody> {
                 disableLengthCheck: true,
               ),
               SizedBox(height: 11.h),
-              AuthTextField(
+              BorderdTextField(
                 labelText: "Password",
                 onChanged: (value) => passwordProvider.state = value,
                 errorText: state.showErrorField('password'),

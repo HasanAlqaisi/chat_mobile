@@ -1,3 +1,4 @@
+import 'package:image_picker/image_picker.dart';
 import 'package:chat_mobile/app/auth/data/auth_repo.dart';
 import 'package:chat_mobile/utils/extensions/jwt_extension.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,3 +29,5 @@ final socketProvider = Provider.autoDispose((ref) {
 
   return socket.connect();
 });
+
+final imagePickerProvider = Provider.autoDispose(((ref) => ImagePicker()));

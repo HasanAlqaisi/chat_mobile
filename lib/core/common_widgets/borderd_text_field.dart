@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import "package:flutter_screenutil/flutter_screenutil.dart";
 
-class AuthTextField extends StatelessWidget {
+class BorderdTextField extends StatelessWidget {
   final String labelText;
   final String? errorText;
   final EdgeInsetsGeometry? contentPadding;
@@ -9,7 +9,7 @@ class AuthTextField extends StatelessWidget {
   final String? Function(String?) validator;
   final TextEditingController? controller;
   final void Function(String)? onChanged;
-  const AuthTextField({
+  const BorderdTextField({
     Key? key,
     required this.labelText,
     this.controller,

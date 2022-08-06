@@ -58,11 +58,11 @@ class UserItemState extends ConsumerState<UserItem> {
           ),
           const Spacer(),
           TextButton(
-            onPressed: () =>
-                ref.watch(chatsControllerProvider.notifier).createChat(
-                      widget.currentUserId!,
-                      widget.user!.id,
-                    ),
+            onPressed: () {
+              ref
+                  .read(chatsControllerProvider.notifier)
+                  .createChat(widget.currentUserId!, widget.user!.id);
+            },
             child: const Text('Request'),
           ),
         ],
