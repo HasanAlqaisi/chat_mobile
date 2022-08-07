@@ -9,12 +9,12 @@ class AuthLocal {
   AuthLocal({required this.usersDao});
 
   Future<void> upsertUsers(
-    List<UsersCompanion> users,
+    List<User> users,
     String? currentUserId,
   ) async =>
       await usersDao.upsertUsers(users, currentUserId);
 
-  Future<void> upsertUser(UsersCompanion user) async =>
+  Future<void> upsertUser(User user) async =>
       await usersDao.upsertUser(user);
 
   Stream<List<User>> watchUsers(String? currentUserId) =>

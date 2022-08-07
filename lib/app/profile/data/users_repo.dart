@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:chat_mobile/app/auth/domain/user.dart';
 import 'package:chat_mobile/app/profile/data/users_local.dart';
 import 'package:chat_mobile/app/profile/data/users_remote.dart';
-import 'package:chat_mobile/core/database/database.dart';
-import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProfileRepo {
@@ -33,17 +31,7 @@ class ProfileRepo {
     try {
       final user = await profileRemote.getProfile();
 
-      final insertableUser = UsersCompanion.insert(
-        id: user.id,
-        username: user.username,
-        firstName: Value(user.firstName),
-        lastName: Value(user.lastName),
-        profileImage: Value(user.profileImage == "" ? null : user.profileImage),
-        phoneNumber: user.phoneNumber,
-        lastVisibleDate: DateTime.now(),
-      );
-
-      await usersLocal.upsertUser(insertableUser);
+      await usersLocal.upsertUser(user);
 
       return user;
     } catch (_) {

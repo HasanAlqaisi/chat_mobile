@@ -11,21 +11,41 @@ class UsersDao extends DatabaseAccessor<AppDatabase> with _$UsersDaoMixin {
   UsersDao(AppDatabase db) : super(db);
 
   Future<void> upsertUsers(
-    List<UsersCompanion> usersList,
+    List<User> usersList,
     String? currentUserId,
   ) async {
+    final companionUsers = usersList
+        .map(
+          (user) => UsersCompanion.insert(
+              id: user.id,
+              username: user.username,
+              phoneNumber: user.phoneNumber,
+              firstName: Value(user.firstName),
+              lastName: Value(user.lastName),
+              profileImage: Value(user.profileImage),
+              lastVisibleDate: user.lastVisibleDate),
+        )
+        .toList();
+
     await batch((batch) {
       batch.deleteWhere<$UsersTable, User>(
           users, (row) => row.id.equals(currentUserId).not());
-      batch.insertAllOnConflictUpdate(users, usersList);
+
+      batch.insertAllOnConflictUpdate(users, companionUsers);
     });
   }
 
-  Future<void> upsertUser(
-    // String currentUserId,
-    UsersCompanion user,
-  ) async {
-    await into(users).insertOnConflictUpdate(user);
+  Future<void> upsertUser(User user) async {
+    await into(users).insertOnConflictUpdate(UsersCompanion.insert(
+      id: user.id,
+      username: user.username,
+      phoneNumber: user.phoneNumber,
+      firstName: Value(user.firstName),
+      lastName: Value(user.lastName),
+      profileImage:
+          Value.ofNullable(user.profileImage == "" ? null : user.profileImage),
+      lastVisibleDate: user.lastVisibleDate,
+    ));
   }
 
   // watch all users except the current one

@@ -33,19 +33,7 @@ class ChatsRepo {
     try {
       final chats = await chatsRemote.getChats(uid, query);
 
-      final insertableChats = chats
-          .map((chat) => ChatsCompanion.insert(
-                chatId: chat.chatId,
-                userId: chat.userId,
-                receiverApprove: chat.receiverApprove,
-                username: chat.username,
-                userImage: Value(chat.userImage),
-                countNewMessages: chat.countNewMessages,
-                latestMessage: Value(chat.latestMessage),
-              ))
-          .toList();
-
-      await chatsLocal.upsertChats(insertableChats);
+      await chatsLocal.upsertChats(chats);
 
       return chats;
     } catch (_) {
@@ -57,16 +45,7 @@ class ChatsRepo {
     try {
       final chat = await chatsRemote.getChat(chatId);
 
-      final insertableConversation = ConversationsCompanion.insert(
-        chatId: chat.chatId,
-        userId: chat.userId,
-        username: chat.username,
-        receiverApprove: chat.receiverApprove,
-        isRequesterSender: chat.isRequesterSender,
-        messages: chat.messages,
-      );
-
-      await chatsLocal.upsertConversation(insertableConversation);
+      await chatsLocal.upsertConversation(chat);
 
       return chat;
     } catch (_) {

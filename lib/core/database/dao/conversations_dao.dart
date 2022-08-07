@@ -12,11 +12,21 @@ class ConversationsDao extends DatabaseAccessor<AppDatabase>
   ConversationsDao(AppDatabase db) : super(db);
 
   Future<void> upsertConversation(
-    ConversationsCompanion conversation,
+    Conversation conversation,
   ) async {
+    final companionConversation = ConversationsCompanion.insert(
+      chatId: conversation.chatId,
+      userId: conversation.userId,
+      username: conversation.username,
+      receiverApprove: conversation.receiverApprove,
+      isRequesterSender: conversation.isRequesterSender,
+      messages: conversation.messages,
+    );
+
     await batch((batch) {
       batch.deleteWhere(conversations, (row) => const Constant(true));
-      batch.insert(conversations, conversation);
+
+      batch.insert(conversations, companionConversation);
     });
   }
 

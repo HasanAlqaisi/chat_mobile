@@ -53,15 +53,7 @@ class AuthRepo {
 
       final user = result.user;
 
-      await authLocal.upsertUser(UsersCompanion.insert(
-        id: user.id,
-        username: user.username,
-        phoneNumber: user.phoneNumber,
-        firstName: Value(user.firstName),
-        lastName: Value(user.lastName),
-        profileImage: Value(user.profileImage),
-        lastVisibleDate: user.lastVisibleDate,
-      ));
+      await authLocal.upsertUser(user);
 
       return result;
     } catch (e) {
@@ -94,22 +86,11 @@ class AuthRepo {
 
   Future<List<User>> searchUsers(String? query, String? currentUserId) async {
     try {
-      final result = await authRemote.searchUsers(query);
+      final users = await authRemote.searchUsers(query);
 
-      final insertableUsers = result
-          .map((user) => UsersCompanion.insert(
-              id: user.id,
-              username: user.username,
-              phoneNumber: user.phoneNumber,
-              firstName: Value(user.firstName),
-              lastName: Value(user.lastName),
-              profileImage: Value(user.profileImage),
-              lastVisibleDate: user.lastVisibleDate))
-          .toList();
+      await authLocal.upsertUsers(users, currentUserId);
 
-      await authLocal.upsertUsers(insertableUsers, currentUserId);
-
-      return result;
+      return users;
     } catch (e) {
       rethrow;
     }

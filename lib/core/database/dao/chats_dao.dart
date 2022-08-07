@@ -10,10 +10,23 @@ part 'chats_dao.g.dart';
 class ChatsDao extends DatabaseAccessor<AppDatabase> with _$ChatsDaoMixin {
   ChatsDao(AppDatabase db) : super(db);
 
-  Future<void> upsertChats(List<ChatsCompanion> chatsList) async {
+  Future<void> upsertChats(List<Chat> chatsList) async {
+    final companionChats = chatsList
+        .map((chat) => ChatsCompanion.insert(
+              chatId: chat.chatId,
+              userId: chat.userId,
+              receiverApprove: chat.receiverApprove,
+              username: chat.username,
+              userImage: Value(chat.userImage),
+              countNewMessages: chat.countNewMessages,
+              latestMessage: Value(chat.latestMessage),
+            ))
+        .toList();
+
     await batch((batch) {
       batch.deleteWhere(chats, (row) => const Constant(true));
-      batch.insertAllOnConflictUpdate(chats, chatsList);
+
+      batch.insertAllOnConflictUpdate(chats, companionChats);
     });
   }
 

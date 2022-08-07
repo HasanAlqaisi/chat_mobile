@@ -14,13 +14,13 @@ class ChatsLocal {
     required this.conversationsDao,
   });
 
-  Future<void> upsertChats(List<ChatsCompanion> chats) async =>
+  Future<void> upsertChats(List<Chat> chats) async =>
       await chatsDao.upsertChats(chats);
 
   Stream<List<Chat>> watchChats(String? currentUserId) =>
       chatsDao.watchChats(currentUserId);
 
-  Future<void> upsertConversation(ConversationsCompanion conversation) async =>
+  Future<void> upsertConversation(Conversation conversation) async =>
       await conversationsDao.upsertConversation(conversation);
 
   Stream<Conversation?> watchConversations(String? chatId) =>
