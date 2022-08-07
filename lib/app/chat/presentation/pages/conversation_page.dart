@@ -4,7 +4,7 @@ import 'package:chat_mobile/app/chat/presentation/providers/conversation_control
 import 'package:chat_mobile/app/chat/presentation/providers/chats_controller.dart';
 import 'package:chat_mobile/app/chat/presentation/providers/providers.dart';
 import 'package:chat_mobile/app/chat/presentation/widgets/conversation_body.dart';
-import 'package:chat_mobile/core/services/socket.dart';
+import 'package:chat_mobile/core/services/chat_socket.dart';
 import 'package:chat_mobile/utils/errors/map_exception_to_failure.dart';
 import 'package:chat_mobile/utils/extensions/failure_extension.dart';
 import 'package:flutter/material.dart';
