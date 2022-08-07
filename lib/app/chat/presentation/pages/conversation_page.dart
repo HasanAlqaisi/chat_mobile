@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:chat_mobile/app/chat/domain/conversation.dart';
-import 'package:chat_mobile/app/chat/presentation/providers/chat_controller.dart';
+import 'package:chat_mobile/app/chat/presentation/providers/conversation_controller.dart';
 import 'package:chat_mobile/app/chat/presentation/providers/chats_controller.dart';
 import 'package:chat_mobile/app/chat/presentation/providers/providers.dart';
 import 'package:chat_mobile/app/chat/presentation/widgets/chat_bubble.dart';
@@ -13,28 +13,28 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class ChatPage extends ConsumerStatefulWidget {
+class ConversationPage extends ConsumerStatefulWidget {
   final String chatId;
   final String currentUserId;
 
-  const ChatPage(
+  const ConversationPage(
       {Key? key,
       @PathParam('id') required this.chatId,
       @PathParam('userId') required this.currentUserId})
       : super(key: key);
 
   @override
-  ChatPageState createState() => ChatPageState();
+  ConversationPageState createState() => ConversationPageState();
 }
 
-class ChatPageState extends ConsumerState<ChatPage> {
+class ConversationPageState extends ConsumerState<ConversationPage> {
   late ChatSocket chatSocket;
 
   @override
   void initState() {
     super.initState();
 
-    ref.read(chatControllerProvider.notifier).fetchChat(widget.chatId);
+    ref.read(conversationControllerProvider.notifier).fetchConversation(widget.chatId);
 
     chatSocket = ref.read(chatSocketProvider);
 
@@ -50,7 +50,8 @@ class ChatPageState extends ConsumerState<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<AsyncValue<Conversation?>>(chatControllerProvider, (_, state) {
+    ref.listen<AsyncValue<Conversation?>>(conversationControllerProvider,
+        (_, state) {
       state.whenOrNull(
           error: (e, _) => mapExceptionToFailure(e).showSnackBar(context),
           data: (_) => ref
@@ -58,8 +59,9 @@ class ChatPageState extends ConsumerState<ChatPage> {
               .fetchChats(widget.currentUserId, ''));
     });
 
-    final chatAsync = ref.watch(conversationStreamProvider(widget.chatId));
-    final chat = chatAsync.asData?.value;
+    final conversationAsync =
+        ref.watch(conversationStreamProvider(widget.chatId));
+    final conversation = conversationAsync.asData?.value;
 
     final contentController = ref.watch(contentControllerProvider);
 
@@ -67,7 +69,7 @@ class ChatPageState extends ConsumerState<ChatPage> {
       backgroundColor: const Color(0xFFF7F7FC),
       appBar: AppBar(
         leading: Icon(Icons.arrow_back_ios, color: Colors.black, size: 18.r),
-        title: Text(chat?.username ?? 'username',
+        title: Text(conversation?.username ?? 'username',
             style: GoogleFonts.mulish(
               color: Colors.black,
               fontSize: 18.sp,
@@ -76,7 +78,7 @@ class ChatPageState extends ConsumerState<ChatPage> {
         backgroundColor: Colors.white,
         elevation: 0.0,
       ),
-      body: temp(chat, contentController, chatSocket),
+      body: temp(conversation, contentController, chatSocket),
     );
   }
 
@@ -112,7 +114,7 @@ class ChatPageState extends ConsumerState<ChatPage> {
                 title: Text("${chat.username} wants to talk. Approve?"),
                 subtitle: TextButton(
                   onPressed: () => ref
-                      .read(chatControllerProvider.notifier)
+                      .read(conversationControllerProvider.notifier)
                       .approveChat(chat.chatId),
                   child: const Icon(Icons.check, size: 32),
                 ),

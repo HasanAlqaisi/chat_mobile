@@ -37,19 +37,19 @@ class ChatsRemote {
         .toList();
   }
 
-  Future<Conversation> getChat(String chatId) async {
+  Future<Conversation> getConversation(String chatId) async {
     final res = await dioClient.dio.get('/chats/$chatId/messages',
         options: Options(headers: {'requireToken': true}));
 
     return Conversation.fromMap(res.data as Map<String, dynamic>);
   }
 
-  Future<void> deleteChat(String chatId) async {
+  Future<void> deleteConversation(String chatId) async {
     await dioClient.dio.delete('/chats/$chatId',
         options: Options(headers: {'requireToken': true}));
   }
 
-  Future<void> approveChat(String chatId) async {
+  Future<void> approveConversation(String chatId) async {
     await dioClient.dio.patch(
       '/chats/approve/$chatId',
       options: Options(headers: {'requireToken': true}),

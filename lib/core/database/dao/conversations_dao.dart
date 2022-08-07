@@ -30,7 +30,7 @@ class ConversationsDao extends DatabaseAccessor<AppDatabase>
     });
   }
 
-  Stream<Conversation?> watchConversations(String? chatId) {
+  Stream<Conversation?> watchConversation(String? chatId) {
     return (select(conversations)
           ..where((conversation) => conversation.chatId.equals(chatId)))
         .watchSingleOrNull();

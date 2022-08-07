@@ -23,8 +23,8 @@ class ChatsLocal {
   Future<void> upsertConversation(Conversation conversation) async =>
       await conversationsDao.upsertConversation(conversation);
 
-  Stream<Conversation?> watchConversations(String? chatId) =>
-      conversationsDao.watchConversations(chatId);
+  Stream<Conversation?> watchConversation(String? chatId) =>
+      conversationsDao.watchConversation(chatId);
 }
 
 final chatsLocalProvider = Provider((ref) {

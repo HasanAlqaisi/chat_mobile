@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:chat_mobile/app/chat/presentation/providers/chat_controller.dart';
+import 'package:chat_mobile/app/chat/presentation/providers/conversation_controller.dart';
 import 'package:chat_mobile/core/providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:socket_io_client/socket_io_client.dart';
@@ -34,7 +34,7 @@ class ChatSocket {
       if (data['senderId'] == currentUserId ||
           data['receiverId'] == currentUserId) {
         log('fetching chat...');
-        ref.read(chatControllerProvider.notifier).fetchChat(chatId);
+        ref.read(conversationControllerProvider.notifier).fetchConversation(chatId);
       }
     });
   }

@@ -19,7 +19,7 @@ import '../app/auth/presentation/forgot_password/pages/forgot_password_page.dart
 import '../app/auth/presentation/login/pages/login_page.dart' as _i1;
 import '../app/auth/presentation/otp/pages/otp_page.dart' as _i3;
 import '../app/auth/presentation/signup/pages/signup_page.dart' as _i2;
-import '../app/chat/presentation/pages/chat_page.dart' as _i7;
+import '../app/chat/presentation/pages/conversation_page.dart' as _i7;
 import '../app/chat/presentation/pages/chats_page.dart' as _i5;
 import '../app/chat/presentation/pages/users_page.dart' as _i6;
 import '../app/profile/presentation/pages/profile_page.dart' as _i8;
@@ -67,7 +67,7 @@ class AppRouter extends _i9.RootStackRouter {
               currentUserId: pathParams.getString('userId')));
       return _i9.MaterialPageX<dynamic>(
           routeData: routeData,
-          child: _i7.ChatPage(
+          child: _i7.ConversationPage(
               key: args.key,
               chatId: args.chatId,
               currentUserId: args.currentUserId));
@@ -143,7 +143,7 @@ class UsersRoute extends _i9.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i7.ChatPage]
+/// [_i7.ConversationPage]
 class ChatRoute extends _i9.PageRouteInfo<ChatRouteArgs> {
   ChatRoute(
       {_i10.Key? key, required String chatId, required String currentUserId})

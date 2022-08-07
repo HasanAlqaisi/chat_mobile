@@ -2,7 +2,7 @@ import 'package:chat_mobile/app/auth/presentation/forgot_password/pages/forgot_p
 import 'package:chat_mobile/app/auth/presentation/login/pages/login_page.dart';
 import 'package:chat_mobile/app/auth/presentation/otp/pages/otp_page.dart';
 import 'package:chat_mobile/app/auth/presentation/signup/pages/signup_page.dart';
-import 'package:chat_mobile/app/chat/presentation/pages/chat_page.dart';
+import 'package:chat_mobile/app/chat/presentation/pages/conversation_page.dart';
 import 'package:chat_mobile/app/chat/presentation/pages/chats_page.dart';
 import 'package:chat_mobile/app/chat/presentation/pages/users_page.dart';
 import 'package:chat_mobile/app/profile/presentation/pages/profile_page.dart';
@@ -36,7 +36,7 @@ final appRouterProvider = Provider<AppRouter>((ref) {
       guards: [AuthGuard],
     ),
     AutoRoute(
-      page: ChatPage,
+      page: ConversationPage,
       path: AppPaths.chat,
       guards: [AuthGuard],
     ),

@@ -3,9 +3,7 @@ import 'package:chat_mobile/app/chat/data/chats_local.dart';
 import 'package:chat_mobile/app/chat/data/chats_remote.dart';
 import 'package:chat_mobile/app/chat/domain/chat.dart';
 import 'package:chat_mobile/app/chat/domain/conversation.dart';
-import 'package:chat_mobile/core/database/database.dart';
 import 'package:chat_mobile/core/services/secure_storage.dart';
-import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ChatsRepo {
@@ -41,9 +39,9 @@ class ChatsRepo {
     }
   }
 
-  Future<Conversation> getChat(String chatId) async {
+  Future<Conversation> getConversation(String chatId) async {
     try {
-      final chat = await chatsRemote.getChat(chatId);
+      final chat = await chatsRemote.getConversation(chatId);
 
       await chatsLocal.upsertConversation(chat);
 
@@ -53,17 +51,17 @@ class ChatsRepo {
     }
   }
 
-  Future<void> deleteChat(String chatId) async {
+  Future<void> deleteConversation(String chatId) async {
     try {
-      await chatsRemote.deleteChat(chatId);
+      await chatsRemote.deleteConversation(chatId);
     } catch (_) {
       rethrow;
     }
   }
 
-  Future<void> approveChat(String chatId) async {
+  Future<void> approveConversation(String chatId) async {
     try {
-      await chatsRemote.approveChat(chatId);
+      await chatsRemote.approveConversation(chatId);
     } catch (_) {
       rethrow;
     }
@@ -72,8 +70,8 @@ class ChatsRepo {
   Stream<List<Chat>> watchChats(String? currentUserId) =>
       chatsLocal.watchChats(currentUserId);
 
-  Stream<Conversation?> watchConversations(String? chatId) =>
-      chatsLocal.watchConversations(chatId);
+  Stream<Conversation?> watchConversation(String? chatId) =>
+      chatsLocal.watchConversation(chatId);
 }
 
 final chatsRepoProvider = Provider<ChatsRepo>((ref) {

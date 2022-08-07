@@ -3,19 +3,19 @@ import 'package:chat_mobile/app/chat/data/messages_repo.dart';
 import 'package:chat_mobile/app/chat/domain/conversation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ChatController extends StateNotifier<AsyncValue<Conversation?>> {
+class ConversationController extends StateNotifier<AsyncValue<Conversation?>> {
   final ChatsRepo chatsRepo;
   final MessagesRepo messagesRepo;
 
-  ChatController({
+  ConversationController({
     required this.chatsRepo,
     required this.messagesRepo,
   }) : super(const AsyncData(null));
 
-  Future<void> fetchChat(String chatId) async {
+  Future<void> fetchConversation(String chatId) async {
     state = const AsyncLoading();
 
-    final getChat = chatsRepo.getChat;
+    final getChat = chatsRepo.getConversation;
 
     state = await AsyncValue.guard(() => getChat(chatId));
   }
@@ -23,18 +23,19 @@ class ChatController extends StateNotifier<AsyncValue<Conversation?>> {
   Future<void> approveChat(String chatId) async {
     state = const AsyncLoading();
 
-    final approveChat = chatsRepo.approveChat;
+    final approveChat = chatsRepo.approveConversation;
 
     await AsyncValue.guard(() => approveChat(chatId));
 
-    await fetchChat(chatId);
+    await fetchConversation(chatId);
   }
 }
 
-final chatControllerProvider = StateNotifierProvider.autoDispose<ChatController,
-    AsyncValue<Conversation?>>((ref) {
+final conversationControllerProvider = StateNotifierProvider.autoDispose<
+    ConversationController, AsyncValue<Conversation?>>((ref) {
   final chatsRepo = ref.watch(chatsRepoProvider);
   final messagesRepo = ref.watch(messagesRepoProvider);
 
-  return ChatController(chatsRepo: chatsRepo, messagesRepo: messagesRepo);
+  return ConversationController(
+      chatsRepo: chatsRepo, messagesRepo: messagesRepo);
 });

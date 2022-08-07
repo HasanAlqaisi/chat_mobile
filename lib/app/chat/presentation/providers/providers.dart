@@ -27,5 +27,5 @@ final conversationStreamProvider =
     StreamProvider.family<Conversation?, String?>((ref, chatId) {
   final chatsRepo = ref.watch(chatsRepoProvider);
 
-  return chatsRepo.watchConversations(chatId);
+  return chatsRepo.watchConversation(chatId);
 });
