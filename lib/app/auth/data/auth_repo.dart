@@ -1,7 +1,7 @@
 import 'package:chat_mobile/app/auth/data/auth_local.dart';
 import 'package:chat_mobile/app/auth/data/auth_remote.dart';
 import 'package:chat_mobile/app/auth/domain/login_info.dart';
-import 'package:chat_mobile/app/auth/domain/user.dart';
+import 'package:chat_mobile/app/shared/domain/user.dart';
 import 'package:chat_mobile/utils/constants/secrets.dart';
 import 'package:chat_mobile/utils/errors/exceptions.dart';
 import 'package:chat_mobile/core/services/secure_storage.dart';

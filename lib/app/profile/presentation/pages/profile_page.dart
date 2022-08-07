@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chat_mobile/app/auth/domain/user.dart';
+import 'package:chat_mobile/app/shared/domain/user.dart';
 import 'package:chat_mobile/app/profile/presentation/controllers/profile_controller.dart';
 import 'package:chat_mobile/app/profile/presentation/controllers/providers.dart';
 import 'package:chat_mobile/core/common_widgets/borderd_text_field.dart';

@@ -1,4 +1,4 @@
-import 'package:chat_mobile/app/auth/domain/user.dart';
+import 'package:chat_mobile/app/shared/domain/user.dart';
 import 'package:chat_mobile/core/database/database.dart';
 import 'package:chat_mobile/core/database/tables.dart';
 import 'package:drift/drift.dart';

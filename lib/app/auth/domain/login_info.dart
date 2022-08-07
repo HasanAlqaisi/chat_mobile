@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:chat_mobile/app/auth/domain/user.dart';
+import 'package:chat_mobile/app/shared/domain/user.dart';
 
 class LoginInfo {
   final String accessToken;

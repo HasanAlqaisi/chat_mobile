@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chat_mobile/app/auth/domain/user.dart';
+import 'package:chat_mobile/app/shared/domain/user.dart';
 import 'package:chat_mobile/app/chat/domain/chat.dart';
 import 'package:chat_mobile/app/chat/presentation/providers/chats_controller.dart';
 import 'package:chat_mobile/app/chat/presentation/providers/providers.dart';

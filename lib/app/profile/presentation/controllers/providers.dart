@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:chat_mobile/app/auth/domain/user.dart';
+import 'package:chat_mobile/app/shared/domain/user.dart';
 import 'package:chat_mobile/app/profile/data/users_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
