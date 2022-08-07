@@ -1,6 +1,3 @@
-import 'dart:developer';
-import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_mobile/app/auth/domain/user.dart';
 import 'package:chat_mobile/app/profile/presentation/controllers/profile_controller.dart';
@@ -14,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:image_picker/image_picker.dart';
 
 class ProfilePage extends ConsumerStatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -33,8 +29,6 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     final formKey = ref.watch(formKeyProvider);
-
-    final imagePicker = ref.watch(imagePickerProvider);
 
     final uid = ref.watch(uidProvider).asData!.value;
 
@@ -170,28 +164,29 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
           Positioned(
             top: 120.h,
             child: InkWell(
-              onTap: () async {
-                final imageFile = ref.read(imageFileProvider.state);
-                final xfile =
-                    await imagePicker.pickImage(source: ImageSource.gallery);
-                imageFile.state = File(xfile!.path);
-                ref.read(shouldShowFileImageProvider.state).state = true;
-                log('${imageFile.state?.path}', name: 'image selected');
-              },
+              onTap: ref.watch(profileControllerProvider.notifier).onImageTap,
               child: CircleAvatar(
                 radius: 64.r,
-                backgroundImage:
-                    ref.watch(shouldShowFileImageProvider.state).state
-                        ? FileImage(ref.watch(imageFileProvider.state).state!)
-                        : profile?.profileImage != null
-                            ? CachedNetworkImageProvider(profile!.profileImage!)
-                            : const AssetImage(AssetsPath.profilePlaceHolder)
-                                as ImageProvider<Object>,
+                backgroundImage: _displayFromImageSource(profile),
               ),
             ),
           ),
         ],
       )),
     );
+  }
+
+  ImageProvider<Object> _displayFromImageSource(User? profile) {
+    final shouldShowPickedFile =
+        ref.watch(shouldShowFileImageProvider.state).state;
+    final hasProfileImage = profile?.profileImage != null;
+
+    if (shouldShowPickedFile) {
+      return FileImage(ref.watch(imageFileProvider.state).state!);
+    } else if (hasProfileImage) {
+      return CachedNetworkImageProvider(profile!.profileImage!);
+    } else {
+      return const AssetImage(AssetsPath.profilePlaceHolder);
+    }
   }
 }

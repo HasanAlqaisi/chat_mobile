@@ -2,15 +2,18 @@ import 'dart:io';
 
 import 'package:chat_mobile/app/auth/domain/user.dart';
 import 'package:chat_mobile/app/profile/data/users_repo.dart';
+import 'package:chat_mobile/app/profile/presentation/controllers/providers.dart';
+import 'package:chat_mobile/core/providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfileController extends StateNotifier<AsyncValue<User?>> {
-  late ProfileRepo profileRepo;
+  late Ref ref;
 
-  ProfileController(this.profileRepo) : super(const AsyncValue.data(null));
+  ProfileController(this.ref) : super(const AsyncValue.data(null));
 
   Future<void> fetchProfile() async {
-    final getProfile = profileRepo.getProfile;
+    final getProfile = ref.read(profileRepoProvider).getProfile;
 
     state = await AsyncValue.guard(() => getProfile());
   }
@@ -23,7 +26,7 @@ class ProfileController extends StateNotifier<AsyncValue<User?>> {
   ) async {
     state = const AsyncValue.loading();
 
-    final editProfile = profileRepo.editProfile;
+    final editProfile = ref.read(profileRepoProvider).editProfile;
 
     final res = await AsyncValue.guard(() => editProfile(
           imageProfile,
@@ -38,13 +41,23 @@ class ProfileController extends StateNotifier<AsyncValue<User?>> {
 
     await fetchProfile();
   }
+
+  Future<void> onImageTap() async {
+    final imagePicker = ref.read(imagePickerProvider);
+
+    final imageFile = ref.read(imageFileProvider.state);
+
+    final xfile = await imagePicker.pickImage(source: ImageSource.gallery);
+
+    imageFile.state = File(xfile!.path);
+
+    ref.read(shouldShowFileImageProvider.state).state = true;
+  }
 }
 
 final profileControllerProvider =
     StateNotifierProvider.autoDispose<ProfileController, AsyncValue<User?>>(
   (ref) {
-    final profileRepo = ref.watch(profileRepoProvider);
-
-    return ProfileController(profileRepo);
+    return ProfileController(ref);
   },
 );

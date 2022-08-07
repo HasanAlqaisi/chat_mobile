@@ -31,11 +31,6 @@ class ChatsPageState extends ConsumerState<ChatsPage> {
   String? currentUserId;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     ref.listen<AsyncValue<String>>(uidProvider, (_, state) {
       state.whenOrNull(
@@ -64,7 +59,7 @@ class ChatsPageState extends ConsumerState<ChatsPage> {
 
     final chatsAsync = ref.watch(chatsStreamProvider(currentUserId));
     final userAsync = ref.watch(userStreamProvider(currentUserId));
-    
+
     final chats = chatsAsync.asData?.value;
     final user = userAsync.asData?.value;
 

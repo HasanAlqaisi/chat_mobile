@@ -3,8 +3,7 @@ import 'package:chat_mobile/app/chat/domain/conversation.dart';
 import 'package:chat_mobile/app/chat/presentation/providers/conversation_controller.dart';
 import 'package:chat_mobile/app/chat/presentation/providers/chats_controller.dart';
 import 'package:chat_mobile/app/chat/presentation/providers/providers.dart';
-import 'package:chat_mobile/app/chat/presentation/widgets/chat_bubble.dart';
-import 'package:chat_mobile/app/chat/presentation/widgets/grey_textfield.dart';
+import 'package:chat_mobile/app/chat/presentation/widgets/conversation_body.dart';
 import 'package:chat_mobile/core/services/socket.dart';
 import 'package:chat_mobile/utils/errors/map_exception_to_failure.dart';
 import 'package:chat_mobile/utils/extensions/failure_extension.dart';
@@ -17,11 +16,11 @@ class ConversationPage extends ConsumerStatefulWidget {
   final String chatId;
   final String currentUserId;
 
-  const ConversationPage(
-      {Key? key,
-      @PathParam('id') required this.chatId,
-      @PathParam('userId') required this.currentUserId})
-      : super(key: key);
+  const ConversationPage({
+    Key? key,
+    @PathParam('id') required this.chatId,
+    @PathParam('userId') required this.currentUserId,
+  }) : super(key: key);
 
   @override
   ConversationPageState createState() => ConversationPageState();
@@ -34,7 +33,9 @@ class ConversationPageState extends ConsumerState<ConversationPage> {
   void initState() {
     super.initState();
 
-    ref.read(conversationControllerProvider.notifier).fetchConversation(widget.chatId);
+    ref
+        .read(conversationControllerProvider.notifier)
+        .fetchConversation(widget.chatId);
 
     chatSocket = ref.read(chatSocketProvider);
 
@@ -63,8 +64,6 @@ class ConversationPageState extends ConsumerState<ConversationPage> {
         ref.watch(conversationStreamProvider(widget.chatId));
     final conversation = conversationAsync.asData?.value;
 
-    final contentController = ref.watch(contentControllerProvider);
-
     return Scaffold(
       backgroundColor: const Color(0xFFF7F7FC),
       appBar: AppBar(
@@ -78,99 +77,10 @@ class ConversationPageState extends ConsumerState<ConversationPage> {
         backgroundColor: Colors.white,
         elevation: 0.0,
       ),
-      body: temp(conversation, contentController, chatSocket),
+      body: ConversationBody(
+        chat: conversation,
+        socket: chatSocket,
+      ),
     );
-  }
-
-  Widget temp(
-    Conversation? chat,
-    TextEditingController contentController,
-    ChatSocket socket,
-  ) {
-    final currentIsSenderAndreceiverNoApprove =
-        chat != null && chat.isRequesterSender && !chat.receiverApprove;
-
-    final currentIsReceiverAndNotApproved =
-        chat != null && !chat.isRequesterSender && !chat.receiverApprove;
-
-    if (currentIsSenderAndreceiverNoApprove) {
-      return Center(
-        child: Text('Waiting ${chat.username} to approve your request'),
-      );
-    } else if (currentIsReceiverAndNotApproved) {
-      return Center(
-        child: FractionallySizedBox(
-          heightFactor: 0.5,
-          widthFactor: 0.75,
-          child: Card(
-            elevation: 2,
-            shadowColor: Colors.blue,
-            margin: const EdgeInsets.all(20),
-            shape: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: const BorderSide(color: Colors.white)),
-            child: Center(
-              child: ListTile(
-                title: Text("${chat.username} wants to talk. Approve?"),
-                subtitle: TextButton(
-                  onPressed: () => ref
-                      .read(conversationControllerProvider.notifier)
-                      .approveChat(chat.chatId),
-                  child: const Icon(Icons.check, size: 32),
-                ),
-              ),
-            ),
-          ),
-        ),
-      );
-    } else {
-      return Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              reverse: true,
-              itemBuilder: ((context, index) {
-                final reversedMessages = chat?.messages.reversed.toList();
-
-                return ChatBubble(
-                  message: reversedMessages?[index],
-                  isUser:
-                      reversedMessages?[index].userId == widget.currentUserId,
-                );
-              }),
-              itemCount: chat?.messages.length ?? 0,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 12.0.w, vertical: 10.h),
-            child: Row(
-              children: [
-                const Icon(Icons.add, color: Color(0xFFADB5BD)),
-                Expanded(
-                  child: GreyTextField(
-                    hint: 'type a message...',
-                    textController: contentController,
-                  ),
-                ),
-                GestureDetector(
-                    onTap: (() {
-                      socket.emitOnMessage(
-                        currentUserId: widget.currentUserId,
-                        chatId: chat!.chatId,
-                        content: contentController.text,
-                      );
-
-                      contentController.clear();
-                    }),
-                    child: const Icon(
-                      Icons.send,
-                      color: Color(0xFF002DE3),
-                    )),
-              ],
-            ),
-          ),
-        ],
-      );
-    }
   }
 }

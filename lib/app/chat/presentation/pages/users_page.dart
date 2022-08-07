@@ -1,12 +1,8 @@
-import 'dart:developer';
-
 import 'package:chat_mobile/app/chat/presentation/providers/providers.dart';
 import 'package:chat_mobile/app/chat/presentation/providers/user_controller.dart';
 import 'package:chat_mobile/app/chat/presentation/widgets/grey_textfield.dart';
 import 'package:chat_mobile/app/chat/presentation/widgets/user_item.dart';
 import 'package:chat_mobile/core/database/database.dart';
-import 'package:chat_mobile/utils/extensions/failure_extension.dart';
-import 'package:chat_mobile/utils/errors/map_exception_to_failure.dart';
 import 'package:chat_mobile/core/providers.dart';
 import 'package:drift_db_viewer/drift_db_viewer.dart';
 import 'package:flutter/material.dart';
@@ -14,34 +10,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class UsersPage extends ConsumerStatefulWidget {
+class UsersPage extends ConsumerWidget {
   const UsersPage({Key? key}) : super(key: key);
 
   @override
-  UsersPageState createState() => UsersPageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final uid = ref.watch(uidProvider).asData!.value;
 
-class UsersPageState extends ConsumerState<UsersPage> {
-  String? currentUserId;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    ref.watch(uidProvider).whenOrNull(
-          error: (e, _) => mapExceptionToFailure(e).showSnackBar(context),
-          data: (value) => currentUserId = value,
-        );
-
-    final usersAsync = ref.watch(usersStreamProvider(currentUserId));
+    final usersAsync = ref.watch(usersStreamProvider(uid));
     final users = usersAsync.asData?.value;
 
     final db = ref.watch(appDatabaseProvider);
-
-    log(users.toString(), name: 'testing users');
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -75,7 +54,7 @@ class UsersPageState extends ConsumerState<UsersPage> {
                 ),
                 onChanged: (query) => ref
                     .watch(usersControllerProvider.notifier)
-                    .searchUsers(query, currentUserId),
+                    .searchUsers(query, uid),
               ),
               Expanded(
                 child: ListView.builder(
@@ -84,7 +63,7 @@ class UsersPageState extends ConsumerState<UsersPage> {
                     padding: EdgeInsets.all(12.0.r),
                     child: UserItem(
                       user: users![index],
-                      currentUserId: currentUserId,
+                      currentUserId: uid,
                     ),
                   ),
                 ),

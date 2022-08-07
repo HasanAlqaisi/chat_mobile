@@ -3,14 +3,14 @@ import 'package:chat_mobile/app/auth/domain/login_info.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LoginController extends StateNotifier<AsyncValue<LoginInfo?>> {
-  late AuthRepo loginRepo;
+  final Ref ref;
 
-  LoginController(this.loginRepo) : super(const AsyncValue.data(null));
+  LoginController(this.ref) : super(const AsyncValue.data(null));
 
   Future<void> login(String phoneNumber, String password) async {
     state = const AsyncValue.loading();
 
-    final login = loginRepo.login;
+    final login = ref.read(authRepoProvider).login;
 
     state = await AsyncValue.guard(() => login(phoneNumber, password));
   }
@@ -19,8 +19,6 @@ class LoginController extends StateNotifier<AsyncValue<LoginInfo?>> {
 final loginControllerProvider =
     StateNotifierProvider.autoDispose<LoginController, AsyncValue<LoginInfo?>>(
   (ref) {
-    final authRepo = ref.watch(authRepoProvider);
-
-    return LoginController(authRepo);
+    return LoginController(ref);
   },
 );
