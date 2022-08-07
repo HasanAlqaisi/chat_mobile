@@ -31,9 +31,7 @@ class ChatsRemote {
     );
 
     return (res.data as List)
-        .map(
-          (chat) => Chat.fromMap(chat as Map<String, dynamic>),
-        )
+        .map((chat) => Chat.fromMap(chat as Map<String, dynamic>))
         .toList();
   }
 

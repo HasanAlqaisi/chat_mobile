@@ -2,7 +2,6 @@ import 'package:chat_mobile/app/chat/domain/chat.dart';
 import 'package:chat_mobile/app/chat/domain/conversation.dart';
 import 'package:chat_mobile/core/database/dao/chats_dao.dart';
 import 'package:chat_mobile/core/database/dao/conversations_dao.dart';
-import 'package:chat_mobile/core/database/database.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ChatsLocal {
