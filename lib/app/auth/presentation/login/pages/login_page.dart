@@ -10,27 +10,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class LoginPage extends ConsumerStatefulWidget {
+class LoginPage extends ConsumerWidget {
   const LoginPage({Key? key}) : super(key: key);
 
   @override
-  LoginPageState createState() => LoginPageState();
-}
-
-class LoginPageState extends ConsumerState<LoginPage> {
-  late TapGestureRecognizer _onSignupTap;
-
-  @override
-  void initState() {
-    super.initState();
-    _onSignupTap = TapGestureRecognizer()
-      ..onTap = () {
-        AutoRouter.of(context).pushNamed(AppPaths.signup);
-      };
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: SafeArea(
         child: ListView(
@@ -53,7 +37,10 @@ class LoginPageState extends ConsumerState<LoginPage> {
                       text: "signup",
                       style:
                           GoogleFonts.outfit(color: Color(AppColors.darkBlue)),
-                      recognizer: _onSignupTap,
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          AutoRouter.of(context).pushNamed(AppPaths.signup);
+                        },
                     ),
                   ],
                 ),

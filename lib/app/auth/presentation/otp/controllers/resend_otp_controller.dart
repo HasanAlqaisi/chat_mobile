@@ -1,5 +1,5 @@
 import 'package:chat_mobile/app/auth/data/auth_repo.dart';
-import 'package:chat_mobile/app/auth/presentation/signup/controllers/state_providers.dart';
+import 'package:chat_mobile/app/auth/presentation/signup/controllers/providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ResendOtpController extends StateNotifier<AsyncValue<String?>> {
@@ -22,7 +22,6 @@ final resendOtpControllerProvider =
     StateNotifierProvider.autoDispose<ResendOtpController, AsyncValue<String?>>(
   (ref) {
     final authRepo = ref.watch(authRepoProvider);
-
     final phoneNumber = ref.watch(phoneSignupProvider);
 
     return ResendOtpController(authRepo, phoneNumber);

@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:chat_mobile/app/auth/presentation/signup/controllers/signup_controller.dart';
-import 'package:chat_mobile/app/auth/presentation/signup/controllers/state_providers.dart';
+import 'package:chat_mobile/app/auth/presentation/signup/controllers/providers.dart';
 import 'package:chat_mobile/core/common_widgets/auth_button.dart';
 import 'package:chat_mobile/core/common_widgets/borderd_text_field.dart';
 import 'package:chat_mobile/routers/app_paths.dart';
@@ -14,22 +14,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
-class SignupBody extends ConsumerStatefulWidget {
-  const SignupBody({
-    Key? key,
-  }) : super(key: key);
+class SignupBody extends ConsumerWidget {
+  const SignupBody({Key? key}) : super(key: key);
 
   @override
-  SignupBodyState createState() => SignupBodyState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final formKey = ref.watch(signupFormKeyProvider);
 
-class SignupBodyState extends ConsumerState<SignupBody> {
-  final _formKey = GlobalKey<FormState>();
-
-  @override
-  Widget build(BuildContext context) {
     final buttonEnabledState = ref.watch(signupButtonEnabled);
-    final state = ref.watch(signupControllerProvider);
+    final controllerState = ref.watch(signupControllerProvider);
 
     final usernameProvider = ref.watch(usernameSignupProvider.notifier);
     final phoneProvider = ref.watch(phoneSignupProvider.notifier);
@@ -47,7 +40,7 @@ class SignupBodyState extends ConsumerState<SignupBody> {
     );
 
     return Form(
-      key: _formKey,
+      key: formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -63,7 +56,7 @@ class SignupBodyState extends ConsumerState<SignupBody> {
               BorderdTextField(
                 labelText: "Username",
                 onChanged: (value) => usernameProvider.state = value,
-                errorText: state.showErrorField('username'),
+                errorText: controllerState.showErrorField('username'),
                 contentPadding: EdgeInsets.all(20.0.r),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -78,7 +71,7 @@ class SignupBodyState extends ConsumerState<SignupBody> {
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.all(20.r),
                   labelText: 'Phone Number',
-                  errorText: state.showErrorField('phoneNumber'),
+                  errorText: controllerState.showErrorField('phoneNumber'),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(5.0.r),
                   ),
@@ -100,7 +93,7 @@ class SignupBodyState extends ConsumerState<SignupBody> {
               BorderdTextField(
                 labelText: "Password",
                 onChanged: (value) => passwordProvider.state = value,
-                errorText: state.showErrorField('password'),
+                errorText: controllerState.showErrorField('password'),
                 contentPadding: EdgeInsets.all(20.0.r),
                 borderRadius: 5,
                 validator: (value) {
@@ -115,7 +108,7 @@ class SignupBodyState extends ConsumerState<SignupBody> {
                 padding: EdgeInsets.only(top: 34.0.h, bottom: 6.h),
                 child: AuthButton(
                   text: 'Signup',
-                  showIndicator: state is AsyncLoading,
+                  showIndicator: controllerState is AsyncLoading,
                   padding: EdgeInsets.symmetric(vertical: 12.h),
                   fontSize: 24.sp,
                   fontWeight: FontWeight.bold,
@@ -125,7 +118,7 @@ class SignupBodyState extends ConsumerState<SignupBody> {
                   borderRadius: 5.r,
                   onPressed: buttonEnabledState
                       ? () async {
-                          if (_formKey.currentState!.validate()) {
+                          if (formKey.currentState!.validate()) {
                             await ref
                                 .read(signupControllerProvider.notifier)
                                 .signup(

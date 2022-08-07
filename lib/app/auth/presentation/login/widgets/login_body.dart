@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:chat_mobile/app/auth/domain/login_info.dart';
 import 'package:chat_mobile/app/auth/presentation/login/controllers/login_controller.dart';
-import 'package:chat_mobile/app/auth/presentation/login/controllers/state_providers.dart';
+import 'package:chat_mobile/app/auth/presentation/login/controllers/providers.dart';
 import 'package:chat_mobile/core/common_widgets/auth_button.dart';
 import 'package:chat_mobile/core/common_widgets/borderd_text_field.dart';
 import 'package:chat_mobile/routers/app_paths.dart';
@@ -15,20 +15,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
-class LoginBody extends ConsumerStatefulWidget {
-  const LoginBody({
-    Key? key,
-  }) : super(key: key);
+class LoginBody extends ConsumerWidget {
+  const LoginBody({Key? key}) : super(key: key);
 
   @override
-  LoginBodyState createState() => LoginBodyState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final formKey = ref.watch(loginFormKeyProvider);
 
-class LoginBodyState extends ConsumerState<LoginBody> {
-  final _formKey = GlobalKey<FormState>();
-
-  @override
-  Widget build(BuildContext context) {
     ref.listen<AsyncValue<LoginInfo?>>(
       loginControllerProvider,
       ((_, state) {
@@ -46,7 +39,7 @@ class LoginBodyState extends ConsumerState<LoginBody> {
     final phoneProvider = ref.watch(loginPhoneTextProvider.notifier);
     final passwordProvider = ref.watch(loginPasswordTextProvider.notifier);
 
-    final shouldButtonEnabled = ref.watch(buttonEnabledProvider);
+    final shouldButtonEnabled = ref.watch(loginButtonEnabledProvider);
     final shouldShowIndicator =
         ref.watch(loginControllerProvider) is AsyncLoading;
 
@@ -54,7 +47,7 @@ class LoginBodyState extends ConsumerState<LoginBody> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Form(
-          key: _formKey,
+          key: formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -75,7 +68,6 @@ class LoginBodyState extends ConsumerState<LoginBody> {
                 flagsButtonMargin: EdgeInsets.all(8.r),
                 showCountryFlag: false,
                 initialCountryCode: 'IQ',
-                // onChanged: (value) => phoneProvider.state = value.number,
                 validator: (value) {
                   if (value == null || value.number.isEmpty) {
                     return 'Please enter the phone number';
@@ -126,7 +118,7 @@ class LoginBodyState extends ConsumerState<LoginBody> {
                 borderRadius: 5.r,
                 onPressed: shouldButtonEnabled
                     ? () async {
-                        if (_formKey.currentState!.validate()) {
+                        if (formKey.currentState!.validate()) {
                           await ref
                               .read(loginControllerProvider.notifier)
                               .login(
