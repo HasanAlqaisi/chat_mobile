@@ -31,7 +31,7 @@ class ChatsRemote {
     );
 
     return (res.data as List)
-        .map((chat) => Chat.fromMap(chat as Map<String, dynamic>))
+        .map((chat) => Chat.fromJson(chat as Map<String, dynamic>))
         .toList();
   }
 
@@ -39,7 +39,7 @@ class ChatsRemote {
     final res = await dioClient.dio.get('/chats/$chatId/messages',
         options: Options(headers: {'requireToken': true}));
 
-    return Conversation.fromMap(res.data as Map<String, dynamic>);
+    return Conversation.fromJson(res.data as Map<String, dynamic>);
   }
 
   Future<void> deleteConversation(String chatId) async {

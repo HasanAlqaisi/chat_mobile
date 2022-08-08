@@ -29,7 +29,7 @@ class AuthRemote {
       'password': password,
     });
 
-    return LoginInfo.fromMap(res.data);
+    return LoginInfo.fromJson(res.data);
   }
 
   Future<String> verifyOtp(String phoneNumber, String otp) async {
@@ -58,7 +58,7 @@ class AuthRemote {
       },
     );
 
-    return (res.data as List).map((user) => User.fromMap(user)).toList();
+    return (res.data as List).map((user) => User.fromJson(user)).toList();
   }
 }
 

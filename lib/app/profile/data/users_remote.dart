@@ -35,7 +35,7 @@ class ProfileRemote {
       data: formData,
     );
 
-    return User.fromMap(res.data);
+    return User.fromJson(res.data);
   }
 
   Future<User> getProfile() async {
@@ -44,7 +44,7 @@ class ProfileRemote {
       options: Options(headers: {'requireToken': true}),
     );
 
-    return User.fromMap(res.data);
+    return User.fromJson(res.data);
   }
 }
 

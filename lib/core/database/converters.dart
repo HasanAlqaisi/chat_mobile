@@ -12,7 +12,7 @@ class LatestMessageConverter extends TypeConverter<LatestMessage?, String>
       return null;
     }
 
-    return LatestMessage.fromJson(json.decode(fromDb));
+    return LatestMessage.fromJson(json.decode(fromDb) as Map<String, dynamic>);
   }
 
   @override
@@ -48,12 +48,6 @@ class ConversationMessageConverter
   String? mapToSql(List<ConversationMessage>? value) {
     if (value == null) return null;
 
-    final List<String> jsonData = [];
-
-    for (final message in value) {
-      jsonData.add(message.toJson());
-    }
-
-    return json.encode(jsonData);
+    return json.encode(value.map((message) => message.toJson()).toList());
   }
 }
