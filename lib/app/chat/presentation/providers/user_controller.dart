@@ -16,14 +16,6 @@ class UserController extends StateNotifier<AsyncValue<List<User>>> {
 
     state = await AsyncValue.guard(() => searchUsers(query, currentUserId));
   }
-
-  // Stream<List<User>> watchUsers(String? query) async {
-  //   state = const AsyncLoading();
-
-  //   final searchUsers = authRepo.searchUsers;
-
-  //   state = await AsyncValue.guard(() => searchUsers(query));
-  // }
 }
 
 final usersControllerProvider =
