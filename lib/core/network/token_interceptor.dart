@@ -32,7 +32,7 @@ class TokenInterceptors extends Interceptor {
 
       final token = await ref.watch(tokenProvider.future);
 
-      if (!Jwt.isExpired(token)) {
+      if (token != null && !Jwt.isExpired(token)) {
         options.headers.addAll({'Authorization': 'Bearer $token'});
 
         handler.next(options);

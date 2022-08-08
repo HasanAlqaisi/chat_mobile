@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:chat_mobile/app/chat/domain/conversation.dart';
 import 'package:chat_mobile/app/chat/presentation/providers/conversation_controller.dart';
@@ -65,8 +63,6 @@ class ConversationPageState extends ConsumerState<ConversationPage> {
     final conversationAsync =
         ref.watch(conversationStreamProvider(widget.chatId));
     final conversation = conversationAsync.asData?.value;
-
-    log(conversation.toString(), name: 'conversation');
 
     return Scaffold(
       backgroundColor: const Color(0xFFF7F7FC),

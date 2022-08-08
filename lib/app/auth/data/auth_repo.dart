@@ -2,17 +2,20 @@ import 'package:chat_mobile/app/auth/data/auth_local.dart';
 import 'package:chat_mobile/app/auth/data/auth_remote.dart';
 import 'package:chat_mobile/app/auth/domain/login_info.dart';
 import 'package:chat_mobile/app/shared/domain/user.dart';
+import 'package:chat_mobile/core/providers.dart';
 import 'package:chat_mobile/utils/constants/secrets.dart';
 import 'package:chat_mobile/utils/errors/exceptions.dart';
 import 'package:chat_mobile/core/services/secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AuthRepo {
+  final Ref ref;
   final AuthRemote authRemote;
   final AuthLocal authLocal;
   final SecureStorage secureStorage;
 
   AuthRepo({
+    required this.ref,
     required this.authRemote,
     required this.authLocal,
     required this.secureStorage,
@@ -48,6 +51,8 @@ class AuthRepo {
       final result = await authRemote.login(phoneNumber, password);
 
       await secureStorage.writeToken(Secrets.tokenKey, result.accessToken);
+
+      ref.refresh(tokenProvider);
 
       final user = result.user;
 
@@ -104,6 +109,7 @@ final authRepoProvider = Provider<AuthRepo>((ref) {
   final authLocal = ref.watch(authLocalProvider);
 
   return AuthRepo(
+    ref: ref,
     authRemote: authRemote,
     secureStorage: appSecureStorage,
     authLocal: authLocal,

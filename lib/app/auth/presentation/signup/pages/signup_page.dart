@@ -1,6 +1,6 @@
 import 'package:chat_mobile/app/auth/presentation/signup/widgets/signup_body.dart';
-import 'package:chat_mobile/core/common_widgets/auth_curve.dart';
-import 'package:chat_mobile/core/common_widgets/auth_image.dart';
+import 'package:chat_mobile/app/shared/presentation/auth_curve.dart';
+import 'package:chat_mobile/app/shared/presentation/auth_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

@@ -1,13 +1,13 @@
+import 'package:chat_mobile/core/services/secure_storage.dart';
+import 'package:chat_mobile/utils/constants/secrets.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:chat_mobile/app/auth/data/auth_repo.dart';
 import 'package:chat_mobile/utils/extensions/jwt_extension.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
-final tokenProvider = FutureProvider<String>((ref) async {
-  final authRepo = ref.watch(authRepoProvider);
-
-  final token = await authRepo.getTokenFromStorage();
+final tokenProvider = FutureProvider<String?>((ref) async {
+  final token =
+      await ref.watch(appSecureStorageProvider).readToken(Secrets.tokenKey);
 
   return token;
 });
@@ -15,7 +15,7 @@ final tokenProvider = FutureProvider<String>((ref) async {
 final uidProvider = FutureProvider<String>((ref) async {
   final token = await ref.watch(tokenProvider.future);
 
-  final uid = JwtExtension.getUserId(token);
+  final uid = JwtExtension.getUserId(token!);
 
   return uid;
 });

@@ -1,10 +1,10 @@
 import 'dart:developer' show log;
 
 import 'package:auto_route/auto_route.dart';
+import 'package:chat_mobile/core/providers.dart';
 import 'package:chat_mobile/core/services/secure_storage.dart';
 import 'package:chat_mobile/routers/app_router.gr.dart';
 import 'package:chat_mobile/utils/constants/secrets.dart';
-import 'package:chat_mobile/utils/errors/exceptions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jwt_decode/jwt_decode.dart';
@@ -12,21 +12,23 @@ import 'package:jwt_decode/jwt_decode.dart';
 final authGuardProvider = Provider((ref) {
   final secureStorage = ref.watch(appSecureStorageProvider);
 
-  return AuthGuard(secureStorage: secureStorage);
+  return AuthGuard(ref: ref, secureStorage: secureStorage);
 });
 
 class AuthGuard extends AutoRouteGuard {
+  final Ref ref;
   final SecureStorage secureStorage;
 
-  AuthGuard({required this.secureStorage});
+  AuthGuard({required this.ref, required this.secureStorage});
 
   @override
   void onNavigation(NavigationResolver resolver, StackRouter router) async {
     log('checking token...', name: 'auth_guard.dart:onNavigation');
 
-    try {
-      final token = await secureStorage.readToken(Secrets.tokenKey);
-      if (token != null && !Jwt.isExpired(token)) {
+    final token = await ref.read(tokenProvider.future);
+
+    if (token != null) {
+      if (!Jwt.isExpired(token)) {
         resolver.next(true);
       } else {
         await secureStorage.writeToken(Secrets.tokenKey, null);
@@ -37,8 +39,9 @@ class AuthGuard extends AutoRouteGuard {
 
         resolver.next(false);
       }
-    } on UserNotAuthedException {
+    } else {
       router.pushAndPopUntil(const LoginRoute(), predicate: (_) => false);
+
       resolver.next(false);
     }
   }
