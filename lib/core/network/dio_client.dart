@@ -9,10 +9,10 @@ class DioClient {
   final TokenInterceptors tokenInterceptors;
 
   DioClient({
+    required this.dio,
     required this.loggingInterceptors,
     required this.tokenInterceptors,
   }) {
-    dio = Dio();
     dio.options.baseUrl = 'http://192.168.0.102:3000';
     dio.interceptors.addAll([loggingInterceptors, tokenInterceptors]);
   }
@@ -23,8 +23,10 @@ final dioProvider = Provider((_) => Dio());
 final dioClientProvider = Provider(((ref) {
   final loggingInterceptors = ref.watch(loggingInterceptorsProvider);
   final tokenInterceptors = ref.watch(tokenInterceptorsProvider);
+  final dio = ref.watch(dioProvider);
 
   return DioClient(
+    dio: dio,
     loggingInterceptors: loggingInterceptors,
     tokenInterceptors: tokenInterceptors,
   );
