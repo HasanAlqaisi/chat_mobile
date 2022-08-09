@@ -22,7 +22,7 @@ part 'database.g.dart';
   daos: [UsersDao, ChatsDao, ConversationsDao],
 )
 class AppDatabase extends _$AppDatabase {
-  AppDatabase() : super(_openConnection());
+  AppDatabase(QueryExecutor e) : super(e);
 
   @override
   int get schemaVersion => 1;
@@ -34,9 +34,8 @@ class AppDatabase extends _$AppDatabase {
       );
 }
 
-LazyDatabase _openConnection() {
-  // the LazyDatabase util lets us find the right location for the file async.
-  return LazyDatabase(() async {
+final appDatabaseProvider = Provider(((ref) {
+  final e = LazyDatabase(() async {
     // put the database file, called db.sqlite here, into the documents folder
     final dbFolder = await getApplicationDocumentsDirectory();
 
@@ -44,6 +43,6 @@ LazyDatabase _openConnection() {
 
     return NativeDatabase(file);
   });
-}
 
-final appDatabaseProvider = Provider(((ref) => AppDatabase()));
+  return AppDatabase(e);
+}));
