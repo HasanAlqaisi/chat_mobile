@@ -49,7 +49,7 @@ class ProfileRemote {
 }
 
 final profileRemoteProvider = Provider<ProfileRemote>(((ref) {
-  final dioClient = ref.watch(dioProvider);
+  final dioClient = ref.watch(dioClientProvider);
 
   return ProfileRemote(dioClient: dioClient);
 }));

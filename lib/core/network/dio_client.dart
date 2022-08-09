@@ -18,7 +18,9 @@ class DioClient {
   }
 }
 
-final dioProvider = Provider(((ref) {
+final dioProvider = Provider((_) => Dio());
+
+final dioClientProvider = Provider(((ref) {
   final loggingInterceptors = ref.watch(loggingInterceptorsProvider);
   final tokenInterceptors = ref.watch(tokenInterceptorsProvider);
 

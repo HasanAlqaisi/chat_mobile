@@ -63,7 +63,7 @@ class AuthRemote {
 }
 
 final authRemoteProvider = Provider<AuthRemote>(((ref) {
-  final dioClient = ref.watch(dioProvider);
+  final dioClient = ref.watch(dioClientProvider);
 
   return AuthRemote(dioClient: dioClient);
 }));

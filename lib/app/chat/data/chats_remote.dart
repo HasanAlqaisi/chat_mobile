@@ -56,7 +56,7 @@ class ChatsRemote {
 }
 
 final chatsRemoteProvider = Provider<ChatsRemote>(((ref) {
-  final dioClient = ref.watch(dioProvider);
+  final dioClient = ref.watch(dioClientProvider);
 
   return ChatsRemote(dioClient: dioClient);
 }));
