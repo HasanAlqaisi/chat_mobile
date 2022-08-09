@@ -7,10 +7,10 @@ abstract class SecureStorage {
   Future<String?> readToken(String key);
 }
 
-class _AppSecureStorage implements SecureStorage {
+class AppSecureStorage implements SecureStorage {
   final FlutterSecureStorage _storage;
 
-  _AppSecureStorage(this._storage);
+  AppSecureStorage(this._storage);
 
   @override
   Future<String?> readToken(String key) async {
@@ -32,5 +32,5 @@ final _flutterSecureStorageProvider = Provider((ref) {
 final appSecureStorageProvider = Provider((ref) {
   final flutterStorage = ref.watch(_flutterSecureStorageProvider);
 
-  return _AppSecureStorage(flutterStorage);
+  return AppSecureStorage(flutterStorage);
 });
