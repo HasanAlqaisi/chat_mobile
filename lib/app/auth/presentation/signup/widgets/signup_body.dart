@@ -1,8 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:chat_mobile/app/auth/presentation/signup/controllers/signup_controller.dart';
 import 'package:chat_mobile/app/auth/presentation/signup/controllers/providers.dart';
-import 'package:chat_mobile/app/shared/presentation/auth_button.dart';
-import 'package:chat_mobile/app/shared/presentation/borderd_text_field.dart';
+import 'package:chat_mobile/core/shared/presentation/auth_button.dart';
+import 'package:chat_mobile/core/shared/presentation/borderd_text_field.dart';
 import 'package:chat_mobile/routers/app_paths.dart';
 import 'package:chat_mobile/utils/constants/app_colors.dart';
 import 'package:chat_mobile/utils/extensions/async_value_extension.dart';

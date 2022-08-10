@@ -13,11 +13,11 @@ import 'package:chat_mobile/app/chat/data/chats_local.dart' as _i14;
 import 'package:chat_mobile/app/chat/data/chats_remote.dart' as _i11;
 import 'package:chat_mobile/app/chat/domain/chat.dart' as _i13;
 import 'package:chat_mobile/app/chat/domain/conversation.dart' as _i3;
-import 'package:chat_mobile/app/shared/domain/user.dart' as _i16;
 import 'package:chat_mobile/core/database/dao/chats_dao.dart' as _i4;
 import 'package:chat_mobile/core/database/dao/conversations_dao.dart' as _i5;
 import 'package:chat_mobile/core/network/dio_client.dart' as _i2;
 import 'package:chat_mobile/core/services/secure_storage.dart' as _i9;
+import 'package:chat_mobile/core/shared/domain/user.dart' as _i16;
 import 'package:flutter_riverpod/flutter_riverpod.dart' as _i6;
 import 'package:mockito/mockito.dart' as _i1;
 

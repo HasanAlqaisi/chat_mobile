@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chat_mobile/app/shared/domain/user.dart';
 import 'package:chat_mobile/app/profile/presentation/controllers/profile_controller.dart';
 import 'package:chat_mobile/app/profile/presentation/controllers/providers.dart';
-import 'package:chat_mobile/app/shared/presentation/borderd_text_field.dart';
 import 'package:chat_mobile/core/providers.dart';
+import 'package:chat_mobile/core/shared/domain/user.dart';
+import 'package:chat_mobile/core/shared/presentation/borderd_text_field.dart';
 import 'package:chat_mobile/utils/constants/assets_path.dart';
 import 'package:chat_mobile/utils/errors/map_exception_to_failure.dart';
 import 'package:chat_mobile/utils/extensions/failure_extension.dart';

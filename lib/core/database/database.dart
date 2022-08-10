@@ -1,6 +1,6 @@
 import 'dart:io';
-import 'package:chat_mobile/app/shared/domain/user.dart';
 import 'package:chat_mobile/app/chat/domain/chat.dart';
+import 'package:chat_mobile/core/shared/domain/user.dart';
 import 'package:chat_mobile/app/chat/domain/conversation.dart';
 import 'package:chat_mobile/app/chat/domain/conversation_message.dart';
 import 'package:chat_mobile/app/chat/domain/latest_message.dart';

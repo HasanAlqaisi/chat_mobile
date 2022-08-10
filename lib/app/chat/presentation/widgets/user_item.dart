@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chat_mobile/app/shared/domain/user.dart';
 import 'package:chat_mobile/app/chat/presentation/providers/chats_controller.dart';
+import 'package:chat_mobile/core/shared/domain/user.dart';
 import 'package:chat_mobile/utils/constants/assets_path.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

@@ -1,5 +1,5 @@
 import 'package:chat_mobile/app/auth/data/auth_repo.dart';
-import 'package:chat_mobile/app/shared/domain/user.dart';
+import 'package:chat_mobile/core/shared/domain/user.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class UserController extends StateNotifier<AsyncValue<List<User>>> {

@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:chat_mobile/app/shared/domain/user.dart';
 import 'package:chat_mobile/core/network/dio_client.dart';
+import 'package:chat_mobile/core/shared/domain/user.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

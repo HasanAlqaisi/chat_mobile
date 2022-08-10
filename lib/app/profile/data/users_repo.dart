@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:chat_mobile/app/shared/domain/user.dart';
 import 'package:chat_mobile/app/profile/data/users_local.dart';
 import 'package:chat_mobile/app/profile/data/users_remote.dart';
+import 'package:chat_mobile/core/shared/domain/user.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProfileRepo {

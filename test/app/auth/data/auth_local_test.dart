@@ -1,7 +1,7 @@
 import 'package:chat_mobile/app/auth/data/auth_local.dart';
-import 'package:chat_mobile/app/shared/domain/user.dart';
 import 'package:chat_mobile/core/database/dao/users_dao.dart';
 import 'package:chat_mobile/core/database/database.dart';
+import 'package:chat_mobile/core/shared/domain/user.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';

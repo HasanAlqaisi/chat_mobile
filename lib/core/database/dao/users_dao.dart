@@ -1,6 +1,6 @@
-import 'package:chat_mobile/app/shared/domain/user.dart';
 import 'package:chat_mobile/core/database/database.dart';
 import 'package:chat_mobile/core/database/tables.dart';
+import 'package:chat_mobile/core/shared/domain/user.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -49,14 +49,8 @@ class UsersDao extends DatabaseAccessor<AppDatabase> with _$UsersDaoMixin {
   }
 
   // watch all users except the current one
-  // when their username or phone number match the query.
   Stream<List<User>> watchUsers(String? currentUserId) {
-    return (select(users)
-          ..where((user) => user.id.equals(currentUserId).not()
-              // &
-              // (users.username.like('%$query%') |
-              // users.phoneNumber.like('%$query%')),
-              ))
+    return (select(users)..where((user) => user.id.equals(currentUserId).not()))
         .watch();
   }
 

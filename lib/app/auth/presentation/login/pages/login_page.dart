@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:chat_mobile/app/auth/presentation/login/widgets/login_body.dart';
-import 'package:chat_mobile/app/shared/presentation/auth_curve.dart';
-import 'package:chat_mobile/app/shared/presentation/auth_image.dart';
+import 'package:chat_mobile/core/shared/presentation/auth_curve.dart';
+import 'package:chat_mobile/core/shared/presentation/auth_image.dart';
 import 'package:chat_mobile/routers/app_paths.dart';
 import 'package:chat_mobile/utils/constants/app_colors.dart';
 import 'package:flutter/gestures.dart';

@@ -1,4 +1,4 @@
-import 'package:chat_mobile/app/shared/domain/user.dart';
+import 'package:chat_mobile/core/shared/domain/user.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'login_info.freezed.dart';
