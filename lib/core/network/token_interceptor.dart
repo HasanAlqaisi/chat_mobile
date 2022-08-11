@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer' show log;
 
 import 'package:chat_mobile/routers/app_router.dart';
@@ -59,8 +60,8 @@ class TokenInterceptors extends Interceptor {
         throw ApiTimeoutException();
       case DioErrorType.response:
         throw ApiResponseException(
-          body: err.response?.data,
-          type: err.response?.data['_type'],
+          body: jsonDecode(err.response?.data),
+          type: jsonDecode(err.response?.data)['_type'],
         );
       case DioErrorType.cancel:
         throw ApiCancelException();
