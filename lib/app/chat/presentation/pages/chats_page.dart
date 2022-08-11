@@ -36,7 +36,11 @@ class ChatsPageState extends ConsumerState<ChatsPage> {
           error: (e, _) => mapExceptionToFailure(e).showSnackBar(context),
           data: (uid) {
             currentUserId = uid;
-            ref.watch(appFcmProvider).handleMessagingToken(currentUserId!);
+
+            ref.read(appFcmProvider)
+              ..getMessagingToken(currentUserId!)
+              ..handleMessagingToken(currentUserId!);
+
             ref
                 .watch(chatsControllerProvider.notifier)
                 .fetchChats(currentUserId!, '');

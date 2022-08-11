@@ -9,8 +9,22 @@ class AppFcm {
 
   AppFcm({required this.ref});
 
+  Future<void> getMessagingToken(String userId) async {
+    log('getting messaging token...');
+
+    final messagingToken = await ref.read(firebaseMessagingProvider).getToken();
+
+    log('messaging token is: $messagingToken');
+
+    if (messagingToken != null) {
+      await ref
+          .read(messagingRemoteProvider)
+          .sendMessagingToken(userId, messagingToken);
+    }
+  }
+
   Future<void> handleMessagingToken(String userId) async {
-    log('handle message accessed');
+    log('handle message accessed;;; userid $userId');
     ref.listen<AsyncValue<String>>(onTokenRefreshProvider, (_, state) async {
       log(state.toString(), name: 'the state of on token');
       final messagingToken = state.asData?.value;
