@@ -2,9 +2,7 @@ import 'package:chat_mobile/app/chat/presentation/providers/providers.dart';
 import 'package:chat_mobile/app/chat/presentation/providers/user_controller.dart';
 import 'package:chat_mobile/app/chat/presentation/widgets/grey_textfield.dart';
 import 'package:chat_mobile/app/chat/presentation/widgets/user_item.dart';
-import 'package:chat_mobile/core/database/database.dart';
 import 'package:chat_mobile/core/providers.dart';
-import 'package:drift_db_viewer/drift_db_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,15 +18,8 @@ class UsersPage extends ConsumerWidget {
     final usersAsync = ref.watch(usersStreamProvider(uid));
     final users = usersAsync.asData?.value;
 
-    final db = ref.watch(appDatabaseProvider);
-
     return Scaffold(
       backgroundColor: Colors.white,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => DriftDbViewer(db))),
-        child: const Icon(Icons.data_array),
-      ),
       appBar: AppBar(
         leading: Icon(Icons.arrow_back_ios, color: Colors.black, size: 18.r),
         title: Text('Find new friend',

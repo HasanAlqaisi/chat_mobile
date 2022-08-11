@@ -6,7 +6,6 @@ import 'package:chat_mobile/routers/app_router.dart';
 import 'package:chat_mobile/routers/app_router.gr.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

@@ -7,7 +7,6 @@ import 'package:chat_mobile/app/chat/presentation/widgets/chat_item.dart';
 import 'package:chat_mobile/app/chat/presentation/widgets/grey_textfield.dart';
 import 'package:chat_mobile/app/profile/presentation/controllers/profile_controller.dart';
 import 'package:chat_mobile/app/profile/presentation/controllers/providers.dart';
-import 'package:chat_mobile/core/database/database.dart';
 import 'package:chat_mobile/core/services/app_fcm.dart';
 import 'package:chat_mobile/core/shared/domain/user.dart';
 import 'package:chat_mobile/routers/app_paths.dart';
@@ -15,7 +14,6 @@ import 'package:chat_mobile/utils/constants/assets_path.dart';
 import 'package:chat_mobile/utils/extensions/failure_extension.dart';
 import 'package:chat_mobile/utils/errors/map_exception_to_failure.dart';
 import 'package:chat_mobile/core/providers.dart';
-import 'package:drift_db_viewer/drift_db_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -65,15 +63,8 @@ class ChatsPageState extends ConsumerState<ChatsPage> {
     final chats = chatsAsync.asData?.value;
     final user = userAsync.asData?.value;
 
-    final db = ref.watch(appDatabaseProvider);
-
     return Scaffold(
       backgroundColor: Colors.white,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => DriftDbViewer(db))),
-        child: const Icon(Icons.data_array),
-      ),
       body: SafeArea(
         child: Column(
           children: [
