@@ -42,8 +42,7 @@ class UsersDao extends DatabaseAccessor<AppDatabase> with _$UsersDaoMixin {
       phoneNumber: user.phoneNumber,
       firstName: Value(user.firstName),
       lastName: Value(user.lastName),
-      profileImage:
-          Value.ofNullable(user.profileImage == "" ? null : user.profileImage),
+      profileImage: Value(user.profileImage == "" ? null : user.profileImage),
       lastVisibleDate: user.lastVisibleDate,
     ));
   }
