@@ -1,10 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chat_mobile/app/chat/domain/chat.dart';
 import 'package:chat_mobile/app/chat/presentation/providers/chats_controller.dart';
 import 'package:chat_mobile/core/shared/domain/user.dart';
 import 'package:chat_mobile/utils/constants/assets_path.dart';
+import 'package:chat_mobile/utils/errors/map_exception_to_failure.dart';
+import 'package:chat_mobile/utils/extensions/failure_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class UserItem extends ConsumerStatefulWidget {
@@ -29,6 +33,13 @@ class UserItemState extends ConsumerState<UserItem> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen<AsyncValue<List<Chat>>>(chatsControllerProvider, (_, state) {
+      state.whenOrNull(
+        data: (_) => Fluttertoast.showToast(msg: 'Request sent'),
+        error: (e, _) => mapExceptionToFailure(e).showSnackBar(context),
+      );
+    });
+
     return SizedBox(
       width: 327.w,
       height: 68.h,

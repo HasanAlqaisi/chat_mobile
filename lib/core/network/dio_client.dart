@@ -13,7 +13,7 @@ class DioClient {
     required this.loggingInterceptors,
     required this.tokenInterceptors,
   }) {
-    dio.options.baseUrl = 'http://192.168.0.102:3000';
+    dio.options.baseUrl = 'http://192.168.0.103:3000';
     // dio.options.baseUrl = 'https://chef-escorts-coating-pain.trycloudflare.com';
     dio.interceptors.addAll([loggingInterceptors, tokenInterceptors]);
   }

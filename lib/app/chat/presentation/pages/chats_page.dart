@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_mobile/app/chat/domain/chat.dart';
 import 'package:chat_mobile/app/chat/presentation/providers/chats_controller.dart';
@@ -9,6 +10,8 @@ import 'package:chat_mobile/app/profile/presentation/controllers/profile_control
 import 'package:chat_mobile/app/profile/presentation/controllers/providers.dart';
 import 'package:chat_mobile/core/services/app_fcm.dart';
 import 'package:chat_mobile/core/shared/domain/user.dart';
+import 'package:chat_mobile/core/shared/presentation/data_widget.dart';
+import 'package:chat_mobile/core/shared/presentation/place_holder_widget.dart';
 import 'package:chat_mobile/routers/app_paths.dart';
 import 'package:chat_mobile/utils/constants/assets_path.dart';
 import 'package:chat_mobile/utils/extensions/failure_extension.dart';
@@ -127,21 +130,28 @@ class ChatsPageState extends ConsumerState<ChatsPage> {
                           size: 16.r,
                         )),
                     Expanded(
-                      child: ListView.builder(
-                        itemCount: chats?.length ?? 0,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: EdgeInsets.symmetric(vertical: 16.0.h),
-                            child: GestureDetector(
-                              onTap: () => AutoRouter.of(context).pushNamed(
-                                '/${chats![index].chatId}/$currentUserId',
+                      child: DataWidget(
+                        data: chats,
+                        dataWidget: ListView.builder(
+                          itemCount: chats?.length ?? 0,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: EdgeInsets.symmetric(vertical: 16.0.h),
+                              child: GestureDetector(
+                                onTap: () => AutoRouter.of(context).pushNamed(
+                                  '/${chats![index].chatId}/$currentUserId',
+                                ),
+                                child: ChatItem(data: chats![index]),
                               ),
-                              child: ChatItem(data: chats![index]),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
+                        defaultWidget: const PlaceHolderWidget(
+                            imagePath: AssetsPath.noChats,
+                            text:
+                                'No chats ${Emojis.smile_sad_but_relieved_face} Click + to find friends"'),
                       ),
-                    ),
+                    )
                   ],
                 ),
               ),

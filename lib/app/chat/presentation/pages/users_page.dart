@@ -3,6 +3,12 @@ import 'package:chat_mobile/app/chat/presentation/providers/user_controller.dart
 import 'package:chat_mobile/app/chat/presentation/widgets/grey_textfield.dart';
 import 'package:chat_mobile/app/chat/presentation/widgets/user_item.dart';
 import 'package:chat_mobile/core/providers.dart';
+import 'package:chat_mobile/core/shared/domain/user.dart';
+import 'package:chat_mobile/core/shared/presentation/data_widget.dart';
+import 'package:chat_mobile/core/shared/presentation/place_holder_widget.dart';
+import 'package:chat_mobile/utils/constants/assets_path.dart';
+import 'package:chat_mobile/utils/errors/map_exception_to_failure.dart';
+import 'package:chat_mobile/utils/extensions/failure_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,6 +20,8 @@ class UsersPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final uid = ref.watch(uidProvider).asData!.value;
+
+    final shouldShowIndicator = ref.watch(shouldShowIndicatorUsersProvider);
 
     final usersAsync = ref.watch(usersStreamProvider(uid));
     final users = usersAsync.asData?.value;
@@ -48,16 +56,23 @@ class UsersPage extends ConsumerWidget {
                     .searchUsers(query, uid),
               ),
               Expanded(
-                child: ListView.builder(
-                  itemCount: users?.length ?? 0,
-                  itemBuilder: (context, index) => Padding(
-                    padding: EdgeInsets.all(12.0.r),
-                    child: UserItem(
-                      user: users![index],
-                      currentUserId: uid,
+                child: DataWidget(
+                    data: users,
+                    dataWidget: ListView.builder(
+                      itemCount: users?.length ?? 0,
+                      itemBuilder: (context, index) => Padding(
+                        padding: EdgeInsets.all(12.0.r),
+                        child: UserItem(
+                          user: users![index],
+                          currentUserId: uid,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
+                    defaultWidget: PlaceHolderWidget(
+                      shouldShowIndicator: shouldShowIndicator,
+                      imagePath: AssetsPath.findNewFriend,
+                      text: "Search for username to get results",
+                    )),
               )
             ],
           ),

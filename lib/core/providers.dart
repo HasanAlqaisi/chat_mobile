@@ -21,7 +21,7 @@ final uidProvider = FutureProvider<String>((ref) async {
 });
 
 final socketProvider = Provider.autoDispose((ref) {
-  Socket socket = io("http://192.168.0.102:3000/", <String, dynamic>{
+  Socket socket = io("http://192.168.0.103:3000/", <String, dynamic>{
     "transports": ["websocket"],
     "autoConnect": false,
     'forceNew': true
