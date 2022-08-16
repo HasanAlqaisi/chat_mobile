@@ -3,12 +3,9 @@ import 'package:chat_mobile/app/chat/presentation/providers/user_controller.dart
 import 'package:chat_mobile/app/chat/presentation/widgets/grey_textfield.dart';
 import 'package:chat_mobile/app/chat/presentation/widgets/user_item.dart';
 import 'package:chat_mobile/core/providers.dart';
-import 'package:chat_mobile/core/shared/domain/user.dart';
 import 'package:chat_mobile/core/shared/presentation/data_widget.dart';
 import 'package:chat_mobile/core/shared/presentation/place_holder_widget.dart';
 import 'package:chat_mobile/utils/constants/assets_path.dart';
-import 'package:chat_mobile/utils/errors/map_exception_to_failure.dart';
-import 'package:chat_mobile/utils/extensions/failure_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
